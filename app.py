@@ -244,8 +244,14 @@ st.markdown("""
     }
 
     /* Fix selectbox selected value not visible on mobile (white on white or low contrast) */
-    .stSelectbox [data-baseweb="single-value"] {
-        color: #111827 !important;
+    .stSelectbox,
+    .stSelectbox * {
+        color: #1e293b !important;
+    }
+    .stSelectbox [data-baseweb="single-value"],
+    .stSelectbox [data-baseweb="select"] > div,
+    .stSelectbox [data-baseweb="select"] > div > div {
+        color: #1e293b !important;
         font-weight: 500 !important;
     }
     .stSelectbox [data-baseweb="placeholder"] {
@@ -254,9 +260,8 @@ st.markdown("""
     .stSelectbox [data-baseweb="select"] > div,
     .stSelectbox [data-baseweb="select"] > div > div {
         background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
+        border: 1px solid #94a3b8 !important; /* stronger visible border */
         border-radius: 8px !important;
-        color: #111827 !important;
     }
     .cx-card {
         padding: 0.7rem !important;
@@ -727,9 +732,15 @@ def apply_branding():
         background-color: white !important;
     }}
 
-    /* Ensure selectbox value text is always visible (dark text on light bg) */
-    .stSelectbox [data-baseweb="single-value"] {{
-        color: #111827 !important;
+    /* Ensure selectbox value text is always visible (dark text on light bg) - stronger for mobile */
+    .stSelectbox,
+    .stSelectbox * {{
+        color: #1e293b !important;
+    }}
+    .stSelectbox [data-baseweb="single-value"],
+    .stSelectbox [data-baseweb="select"] > div,
+    .stSelectbox [data-baseweb="select"] > div > div {{
+        color: #1e293b !important;
         font-weight: 500 !important;
     }}
     .stSelectbox [data-baseweb="placeholder"] {{
@@ -738,8 +749,7 @@ def apply_branding():
     .stSelectbox [data-baseweb="select"] > div,
     .stSelectbox [data-baseweb="select"] > div > div {{
         background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        color: #111827 !important;
+        border: 1px solid #94a3b8 !important;
     }}
     
     /* Force all text inside the main header to be pure white */
