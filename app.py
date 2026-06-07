@@ -2740,19 +2740,16 @@ def render_daily_service_qc(context):
 
         # Add form - original style with st.form and camera + file upload
         with st.form("add_facility_check", clear_on_submit=True):
-            col1, col2 = st.columns([1.65, 1])
-            with col1:
-                area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
-            with col2:
-                status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
+            area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
+            status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
 
-            notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=76, key="fac_notes")
+            notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
 
             # Foto Bukti via galeri (direct camera removed to keep app lighter on mobile)
             st.markdown("**Foto Bukti** (sangat disarankan)")
             photo_file = st.file_uploader("Pilih dari galeri", type=["png", "jpg", "jpeg"], key="fac_photo_file", label_visibility="collapsed")
 
-            if st.form_submit_button("➕ Tambah / Update Pengecekan Area Ini", type="primary", use_container_width=True):
+            if st.form_submit_button("➕ Tambah / Update Pengecekan Area Ini", type="primary"):
                 photo = photo_file
                 entry = {
                     "timestamp": datetime.now().isoformat(),
