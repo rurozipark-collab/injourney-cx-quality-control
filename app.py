@@ -242,6 +242,29 @@ st.markdown("""
         font-size: 16px !important; /* Prevent iOS zoom */
         padding: 12px !important;
     }
+
+    /* Extra safety for select value visibility on mobile PWA */
+    .stSelectbox [data-baseweb="single-value"],
+    .stSelectbox [data-baseweb="select"] > div,
+    .stSelectbox [data-baseweb="select"] > div > div {
+        color: #111827 !important;
+    }
+
+    /* Fix selectbox selected value not visible on mobile (white on white or low contrast) */
+    .stSelectbox [data-baseweb="single-value"] {
+        color: #111827 !important;
+        font-weight: 500 !important;
+    }
+    .stSelectbox [data-baseweb="placeholder"] {
+        color: #6b7280 !important;
+    }
+    .stSelectbox [data-baseweb="select"] > div,
+    .stSelectbox [data-baseweb="select"] > div > div {
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        color: #111827 !important;
+    }
     .cx-card {
         padding: 0.7rem !important;
         margin-bottom: 0.5rem !important;
@@ -710,6 +733,21 @@ def apply_branding():
     .stTextInput, .stTextArea, .stSelectbox, .stFileUploader {{
         background-color: white !important;
     }}
+
+    /* Ensure selectbox value text is always visible (dark text on light bg) */
+    .stSelectbox [data-baseweb="single-value"] {
+        color: #111827 !important;
+        font-weight: 500 !important;
+    }
+    .stSelectbox [data-baseweb="placeholder"] {
+        color: #6b7280 !important;
+    }
+    .stSelectbox [data-baseweb="select"] > div,
+    .stSelectbox [data-baseweb="select"] > div > div {
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #111827 !important;
+    }
     
     /* Force all text inside the main header to be pure white */
     .injourney-header,
