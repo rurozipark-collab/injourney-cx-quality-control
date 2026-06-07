@@ -2770,17 +2770,8 @@ def render_daily_service_qc(context):
         st.markdown("**Lokasi Saat Ini**")
         st.info(current_location, icon="📍")
 
-    # Prominent data context for cross-device (phone <-> Mac) visibility
-    # Now using shared "harian" file per date so mobile input automatically appears on Mac.
-    st.markdown(
-        f'<div style="background:#fef3c7; color:#92400e; padding:8px 12px; border-radius:8px; font-size:0.9rem; margin:8px 0; border:1px solid #fcd34d;">'
-        f'<b>Data harian bersama</b> (terintegrasi HP ↔ Mac)<br>'
-        f'Tanggal: <b>{daily.get("date")}</b> | Inspector saat ini: <b>{current_inspector}</b><br>'
-        f'File: <code>{daily.get("date")}_harian.json</code> (shared)<br>'
-        f'Input di mobile akan otomatis tampil di Mac (dan sebaliknya) selama tanggal sama.'
-        f'</div>',
-        unsafe_allow_html=True
-    )
+    # Data context banner (for integration awareness)
+    st.caption(f"Data harian bersama untuk tanggal ini (shared). Inspector: {current_inspector}. Gunakan Export/Import di Ringkasan jika perlu pindah antar perangkat lama.")
 
     if st.button("🔄 Muat Ulang Data dari Server", key="reload_daily_top", use_container_width=True):
         st.session_state.pop("daily_qc", None)
@@ -2809,25 +2800,26 @@ def render_daily_service_qc(context):
             "Lift / Escalator", "Signage & Wayfinding", "Parking Area", "Other"
         ]
 
-        # Add form (restored to original st.form style)
+        # Add form - original style with st.form and camera + file upload
         with st.form("add_facility_check", clear_on_submit=True):
             area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
             status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
 
             notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
 
-            # Foto bukti via galeri only (direct camera removed earlier for lightness)
-            st.markdown("**Foto Bukti** (opsional)")
-            photo_file = st.file_uploader("Pilih foto dari galeri HP", type=["png", "jpg", "jpeg"], key="fac_photo_file", label_visibility="collapsed")
+            # Mobile-friendly photo capture - original with camera + galeri
+            st.markdown("**Foto Bukti** (sangat disarankan)")
+            photo_file = st.file_uploader("Pilih dari galeri", type=["png", "jpg", "jpeg"], key="fac_photo_file", label_visibility="collapsed")
+            camera_photo = st.camera_input("Ambil foto langsung dengan kamera HP", key="fac_camera")
 
             if st.form_submit_button("➕ Tambah / Update Pengecekan Area Ini", type="primary"):
-                photo = photo_file
+                photo = camera_photo or photo_file
                 entry = {
                     "timestamp": datetime.now().isoformat(),
                     "area": area,
                     "status": status,
                     "notes": notes.strip(),
-                    "photo_name": getattr(photo, 'name', 'foto_bukti.jpg') if photo else None,
+                    "photo_name": getattr(photo, 'name', 'camera_photo.jpg') if photo else None,
                     "photo_data": base64.b64encode(photo.getvalue()).decode() if photo else None
                 }
                 daily["facility_checks"] = [e for e in daily["facility_checks"] if e["area"] != area]
@@ -2836,11 +2828,9 @@ def render_daily_service_qc(context):
                 st.success(f"✅ {area} dicatat sebagai {status}")
                 st.rerun()
 
-        # Current list (original position after form)
+        # Current list (original position after the form)
         if daily["facility_checks"]:
             st.markdown("**Pengecekan Hari Ini**")
-            if st.button("🔄 Refresh Daftar", key="refresh_fac", use_container_width=True):
-                st.rerun()
             for idx, item in enumerate(daily["facility_checks"]):
                 emoji = "🟢" if item["status"] == "Baik" else ("🟡" if "Minor" in item["status"] else "🔴")
                 with st.expander(f"{emoji} {item['area']} — {item['status']}", expanded=False):
@@ -2882,10 +2872,29 @@ def render_daily_service_qc(context):
                 st.success("Keluhan dicatat.")
                 st.rerun()
 
+        with st.form("add_complaint", clear_on_submit=True):
+            c_area = st.selectbox("Area Terkait", facility_areas, key="comp_area")
+            c_cat = st.selectbox("Kategori", complaint_cats, key="comp_cat")
+            c_desc = st.text_area("Deskripsi Keluhan", height=70, key="comp_desc")
+            c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
+            c_status = st.selectbox("Status Penanganan", ["Open", "In Progress", "Resolved"], key="comp_status")
+
+            if st.form_submit_button("➕ Catat Keluhan", type="primary"):
+                comp = {
+                    "timestamp": datetime.now().isoformat(),
+                    "area": c_area,
+                    "category": c_cat,
+                    "description": c_desc.strip(),
+                    "action_today": c_action.strip(),
+                    "status": c_status
+                }
+                daily["complaints"].append(comp)
+                save_daily_qc(daily)
+                st.success("Keluhan dicatat.")
+                st.rerun()
+
         if daily["complaints"]:
             st.markdown("**Keluhan Hari Ini**")
-            if st.button("🔄 Refresh Daftar", key="refresh_comp", use_container_width=True):
-                st.rerun()
             for i, c in enumerate(daily["complaints"]):
                 emoji = "🟢" if c["status"] == "Resolved" else ("🟡" if c["status"] == "In Progress" else "🔴")
                 with st.expander(f"{emoji} [{c['area']}] {c['category']} — {c['status']}", expanded=False):
@@ -2940,9 +2949,6 @@ def render_daily_service_qc(context):
 
         if daily["issues"]:
             st.markdown("### Daftar Issue Hari Ini")
-            if st.button("🔄 Refresh Daftar", key="refresh_iss", use_container_width=True):
-                st.rerun()
-
             for idx, iss in enumerate(daily["issues"]):
                 status_emoji = "🟢" if iss["status"] == "Closed" else ("🟡" if iss["status"] == "In Progress" else "🔴")
                 header = f"{status_emoji} [{iss['area']}] {iss['category']} — {iss['status']}"
