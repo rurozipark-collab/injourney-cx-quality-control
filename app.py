@@ -1652,26 +1652,16 @@ def compute_element_scores(audits: list) -> dict:
 def render_knowledge_base(context):
     st.markdown("## 📚 Knowledge Base — Tanya Playbook CX InJourney")
 
-    # Attempt lazy load of the heavy RAG stack only when this tab is visited.
-    # This is the key to avoiding the protobuf crash at app startup.
-    loaded = _try_import_rag()
-
-    if not loaded or not RAG_AVAILABLE:
-        st.error("❌ Fitur Knowledge Base (RAG + AI) tidak tersedia di environment ini.")
-        st.markdown(
-            "Penyebab paling umum: konflik versi **protobuf** dengan `chromadb` / `sentence-transformers` "
-            "pada Streamlit Community Cloud (free tier)."
-        )
-        st.info(
-            "Daily Service QC (Harian) di tab terakhir **tetap berfungsi penuh** (facility checks, complaints, issues + foto, export PDF/Excel)."
-        )
-        with st.expander("Detail error (untuk developer)"):
-            st.code(RAG_IMPORT_ERROR or "Unknown import error", language="text")
-        st.markdown("**Workaround yang sudah diterapkan di kode ini:**")
-        st.markdown("- Pin `protobuf>=3.19.0,<4.25` (dan ==3.20.3) di requirements.txt")
-        st.markdown("- PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python di awal app.py")
-        st.markdown("- Heavy RAG import dibuat lazy (hanya dicoba saat tab ini dibuka)")
-        return
+    # AI / RAG features have been disabled (per user request "hapus saja Ai nya")
+    # to keep the app lightweight and fast for the main Daily Service QC use case.
+    # No attempt to load heavy packages (chromadb etc.) is made.
+    st.info("Fitur Knowledge Base (AI/RAG) dinonaktifkan untuk menjaga performa dan stabilitas aplikasi.")
+    st.markdown(
+        "Fokus utama aplikasi ini adalah **📋 Daily Service QC (Harian)** di tab terakhir, "
+        "yang mendukung pencatatan cepat, foto bukti, dan export PDF/Excel yang rapih."
+    )
+    st.caption("Jika suatu saat butuh fitur AI lagi, kita bisa tambahkan kembali dengan dependencies terpisah.")
+    return
 
     env = get_environment_status()
     
