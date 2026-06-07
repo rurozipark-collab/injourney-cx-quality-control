@@ -21,6 +21,12 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+# -----------------------------------------------------------------------------
+# EARLY FIX FOR PROTOBUF / CHROMADB CONFLICT (must be before any heavy imports)
+# This is the recommended workaround from the error message itself.
+# -----------------------------------------------------------------------------
+os.environ.setdefault("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python")
+
 # Our modules - robust imports for Streamlit
 import sys
 from pathlib import Path
@@ -30,15 +36,17 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 # -----------------------------------------------------------------------------
-# OPTIONAL MODULE IMPORTS (made non-fatal)
-# We separate audit (local JSON) from heavy RAG stack so that the core
-# "Daily Service QC (Harian)" tab can always load, even if chromadb /
-# sentence-transformers trigger protobuf descriptor errors on some platforms
-# (common on Streamlit Community Cloud free tier).
+# OPTIONAL MODULE IMPORTS (made non-fatal + lazy for heavy RAG)
+# We completely avoid importing the heavy RAG stack (rag_engine, llm, pdf_processor)
+# at module load time. This prevents chromadb/sentence-transformers/protobuf
+# descriptor crashes from killing the entire app at startup on Streamlit Cloud.
+#
+# Daily Service QC (Harian) has ZERO dependency on RAG and will always work.
+# The Knowledge Base tab will attempt lazy load only when opened.
 # -----------------------------------------------------------------------------
 AUDIT_AVAILABLE = False
 RAG_AVAILABLE = False
-RAG_IMPORT_ERROR = ""
+RAG_IMPORT_ERROR = "RAG stack is loaded lazily only inside Knowledge Base tab to keep startup stable."
 
 # Audit manager (used by full inspection / reports). Local file ops, usually safe.
 try:
@@ -60,20 +68,9 @@ except Exception as audit_err:
     # Do not crash the whole app — Daily Service QC does not depend on this.
     pass
 
-# RAG / LLM / PDF processor stack (heavy — can pull chromadb, sentence-transformers etc.)
-try:
-    from utils.rag_engine import (
-        ingest_playbooks,
-        get_vectorstore,
-        retrieve_context,
-    )
-    from utils.llm import ask_playbook_question
-    from utils.pdf_processor import get_playbook_stats
-    RAG_AVAILABLE = True
-except Exception as import_err:
-    RAG_IMPORT_ERROR = str(import_err)
-    # IMPORTANT: Do NOT call st.stop() here.
-    # The user primarily uses the Daily Service QC tab which must remain usable.
+# NOTE: We deliberately do NOT do the "from utils.rag_engine import ..." here anymore.
+# The heavy imports (which trigger the protobuf error) are moved to lazy loading
+# inside render_knowledge_base() only. This keeps the app starting reliably.
 
 # Report generators (will be created next)
 # For now we implement basic versions inline
@@ -114,13 +111,46 @@ def render_environment_banner():
 
 # =============================================================================
 # CACHED RAG HELPERS (Important for performance)
-# These are now defensive so they don't crash when RAG modules failed to import.
+# Completely lazy: we only attempt to import the heavy RAG modules when
+# the Knowledge Base tab is actually opened. This avoids crashing the
+# entire app at startup on Streamlit Cloud due to protobuf/chromadb issues.
+# For normal use (Daily Service QC), these functions just return safe defaults.
 # =============================================================================
+
+def _try_import_rag():
+    """Attempt to import the heavy RAG symbols. Returns True on success."""
+    global RAG_AVAILABLE, RAG_IMPORT_ERROR
+    if RAG_AVAILABLE:
+        return True
+    try:
+        from utils.rag_engine import (
+            ingest_playbooks,
+            get_vectorstore,
+            retrieve_context,
+        )
+        from utils.llm import ask_playbook_question
+        from utils.pdf_processor import get_playbook_stats
+
+        # Make them available in global scope for the rest of the module
+        globals()["ingest_playbooks"] = ingest_playbooks
+        globals()["get_vectorstore"] = get_vectorstore
+        globals()["retrieve_context"] = retrieve_context
+        globals()["ask_playbook_question"] = ask_playbook_question
+        globals()["get_playbook_stats"] = get_playbook_stats
+
+        RAG_AVAILABLE = True
+        RAG_IMPORT_ERROR = ""
+        return True
+    except Exception as import_err:
+        RAG_IMPORT_ERROR = str(import_err)
+        RAG_AVAILABLE = False
+        return False
+
 
 @st.cache_resource
 def get_cached_vectorstore():
     """Cache the heavy Chroma vectorstore + embedding model."""
-    if not RAG_AVAILABLE:
+    if not _try_import_rag():
         return None
     try:
         return get_vectorstore()
@@ -131,7 +161,7 @@ def get_cached_vectorstore():
 @st.cache_resource
 def get_cached_embedding_model():
     """Cache the embedding model."""
-    if not RAG_AVAILABLE:
+    if not _try_import_rag():
         return None
     try:
         from utils.rag_engine import get_embedding_model
@@ -142,7 +172,7 @@ def get_cached_embedding_model():
 
 def is_vectorstore_ready() -> bool:
     """Check if the vector store has been populated (uses cached store)."""
-    if not RAG_AVAILABLE:
+    if not _try_import_rag():
         return False
     try:
         vs = get_cached_vectorstore()
@@ -156,7 +186,7 @@ def is_vectorstore_ready() -> bool:
 
 def get_vectorstore_stats() -> dict:
     """Get stats from the cached vectorstore."""
-    if not RAG_AVAILABLE:
+    if not _try_import_rag():
         return {"error": "RAG modules not available", "is_ready": False}
     try:
         vs = get_cached_vectorstore()
@@ -827,8 +857,11 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"{APP_VERSION} • Powered by 6 Official CX Playbooks")
 
-        # Compute RAG status (needed by other parts of the app), but do not display it
-        rag_ready = is_vectorstore_ready()
+        # RAG status: we force False at sidebar level to avoid triggering
+        # the heavy chromadb/sentence-transformers import during normal startup
+        # (Daily Service QC + most tabs don't need it).
+        # The Knowledge Base tab will attempt lazy load when the user opens it.
+        rag_ready = False
 
         return {
             "airport": airport,
@@ -1619,7 +1652,11 @@ def compute_element_scores(audits: list) -> dict:
 def render_knowledge_base(context):
     st.markdown("## 📚 Knowledge Base — Tanya Playbook CX InJourney")
 
-    if not RAG_AVAILABLE:
+    # Attempt lazy load of the heavy RAG stack only when this tab is visited.
+    # This is the key to avoiding the protobuf crash at app startup.
+    loaded = _try_import_rag()
+
+    if not loaded or not RAG_AVAILABLE:
         st.error("❌ Fitur Knowledge Base (RAG + AI) tidak tersedia di environment ini.")
         st.markdown(
             "Penyebab paling umum: konflik versi **protobuf** dengan `chromadb` / `sentence-transformers` "
@@ -1631,8 +1668,9 @@ def render_knowledge_base(context):
         with st.expander("Detail error (untuk developer)"):
             st.code(RAG_IMPORT_ERROR or "Unknown import error", language="text")
         st.markdown("**Workaround yang sudah diterapkan di kode ini:**")
-        st.markdown("- Pin `protobuf>=3.19.0,<4.25` di requirements.txt")
-        st.markdown("- Import RAG dibuat non-fatal supaya app tetap jalan")
+        st.markdown("- Pin `protobuf>=3.19.0,<4.25` (dan ==3.20.3) di requirements.txt")
+        st.markdown("- PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python di awal app.py")
+        st.markdown("- Heavy RAG import dibuat lazy (hanya dicoba saat tab ini dibuka)")
         return
 
     env = get_environment_status()
