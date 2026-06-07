@@ -572,7 +572,7 @@ def apply_branding():
     }}
     .stButton > button[kind="secondary"] {{
         background: white !important;
-        color: {INJOURNEY["text"]} !important;
+        color: {light["text"]} !important;
         border: 1.5px solid #E2E8F0 !important;
         box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.05);
     }}
@@ -2815,24 +2815,14 @@ def render_daily_service_qc(context):
         if daily["complaints"]:
             st.markdown("**Keluhan Hari Ini**")
             for i, c in enumerate(daily["complaints"]):
-                status_class = "status-baik" if c["status"] == "Resolved" else ("status-minor" if c["status"] == "In Progress" else "status-major")
-                with st.container():
-                    st.markdown(f"""
-                    <div class="cx-card" style="padding:0.85rem 1.1rem;">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
-                            <div style="flex:1;">
-                                <div style="font-weight:700; color:#0F172A;">[{c['area']}] {c['category']}</div>
-                                <div style="margin:4px 0 2px; font-size:0.9rem; color:#475569;">{c['description']}</div>
-                                <div style="font-size:0.82rem; color:#64748B;">Tindakan: {c['action_today'] or '—'}</div>
-                            </div>
-                            <div style="text-align:right; flex-shrink:0;">
-                                <span class="status-badge {status_class}">{c['status']}</span>
-                    """, unsafe_allow_html=True)
-                    if st.button("Hapus", key=f"del_comp_{i}", type="secondary"):
+                emoji = "🟢" if c["status"] == "Resolved" else ("🟡" if c["status"] == "In Progress" else "🔴")
+                with st.expander(f"{emoji} [{c['area']}] {c['category']} — {c['status']}", expanded=False):
+                    st.write(f"**Deskripsi:** {c['description']}")
+                    st.write(f"**Tindakan hari ini:** {c['action_today'] or '-'}")
+                    if st.button("Hapus", key=f"del_comp_{i}"):
                         daily["complaints"].pop(i)
                         save_daily_qc(daily)
                         st.rerun()
-                    st.markdown("</div></div></div>", unsafe_allow_html=True)
         else:
             st.info("Belum ada keluhan tercatat hari ini.")
 
@@ -2877,31 +2867,25 @@ def render_daily_service_qc(context):
                 st.rerun()
 
         if daily["issues"]:
-            st.markdown("**Daftar Issue Hari Ini**")
+            st.markdown("### Daftar Issue Hari Ini")
             for idx, iss in enumerate(daily["issues"]):
-                status_class = "status-baik" if iss["status"] == "Closed" else ("status-minor" if iss["status"] == "In Progress" else "status-major")
-                with st.container():
-                    st.markdown(f"""
-                    <div class="cx-card" style="padding:0.85rem 1.1rem;">
-                        <div style="display:flex; justify-content:space-between; gap:10px;">
-                            <div style="flex:1; min-width:0;">
-                                <div style="font-weight:700; color:#0F172A; font-size:0.98rem;">[{iss['area']}] {iss['category']}</div>
-                                <div style="margin:4px 0; font-size:0.88rem; color:#475569; line-height:1.3;">{iss['description']}</div>
-                                <div style="font-size:0.8rem; color:#64748B;">
-                                    RCA: {iss['root_cause']} • PIC: {iss['pic'] or '—'} • Due: {iss['due_date']}
-                                </div>
-                                <div style="margin-top:3px; font-size:0.8rem; color:#475569;">
-                                    Tindakan: {iss['immediate_action'] or '—'}
-                                </div>
-                            </div>
-                            <div style="flex-shrink:0; text-align:right;">
-                                <span class="status-badge {status_class}">{iss['status']}</span>
-                    """, unsafe_allow_html=True)
-                    if st.button("Hapus", key=f"del_iss_{idx}", type="secondary"):
+                status_emoji = "🟢" if iss["status"] == "Closed" else ("🟡" if iss["status"] == "In Progress" else "🔴")
+                header = f"{status_emoji} [{iss['area']}] {iss['category']} — {iss['status']}"
+
+                with st.container(border=True):
+                    st.markdown(f"**{header}**")
+                    st.write(f"**Deskripsi:** {iss['description']}")
+                    st.write(f"**Root Cause (saat ini):** {iss['root_cause']}")
+                    st.write(f"**Tindakan Segera:** {iss['immediate_action'] or '-'}")
+                    st.write(f"**PIC:** {iss['pic'] or '-'}  |  **Due:** {iss['due_date']}")
+
+                    if st.button("Hapus Issue", key=f"del_iss_{idx}", type="secondary"):
                         daily["issues"].pop(idx)
                         save_daily_qc(daily)
                         st.rerun()
-                    st.markdown("</div></div></div>", unsafe_allow_html=True)
+
+                    st.markdown("")  # spacing
+
         else:
             st.info("Belum ada issue. Tambahkan melalui form di atas.")
 
