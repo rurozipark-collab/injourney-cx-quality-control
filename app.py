@@ -29,12 +29,19 @@ PROJECT_ROOT = Path(__file__).parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+# -----------------------------------------------------------------------------
+# OPTIONAL MODULE IMPORTS (made non-fatal)
+# We separate audit (local JSON) from heavy RAG stack so that the core
+# "Daily Service QC (Harian)" tab can always load, even if chromadb /
+# sentence-transformers trigger protobuf descriptor errors on some platforms
+# (common on Streamlit Community Cloud free tier).
+# -----------------------------------------------------------------------------
+AUDIT_AVAILABLE = False
+RAG_AVAILABLE = False
+RAG_IMPORT_ERROR = ""
+
+# Audit manager (used by full inspection / reports). Local file ops, usually safe.
 try:
-    from utils.rag_engine import (
-        ingest_playbooks,
-        get_vectorstore,
-        retrieve_context,
-    )
     from utils.audit_manager import (
         save_audit,
         load_audit,
@@ -48,11 +55,25 @@ try:
         update_audit,
         AUDITS_DIR,
     )
+    AUDIT_AVAILABLE = True
+except Exception as audit_err:
+    # Do not crash the whole app — Daily Service QC does not depend on this.
+    pass
+
+# RAG / LLM / PDF processor stack (heavy — can pull chromadb, sentence-transformers etc.)
+try:
+    from utils.rag_engine import (
+        ingest_playbooks,
+        get_vectorstore,
+        retrieve_context,
+    )
     from utils.llm import ask_playbook_question
     from utils.pdf_processor import get_playbook_stats
+    RAG_AVAILABLE = True
 except Exception as import_err:
-    st.error(f"❌ Gagal import modul internal: {import_err}")
-    st.stop()
+    RAG_IMPORT_ERROR = str(import_err)
+    # IMPORTANT: Do NOT call st.stop() here.
+    # The user primarily uses the Daily Service QC tab which must remain usable.
 
 # Report generators (will be created next)
 # For now we implement basic versions inline
@@ -93,25 +114,40 @@ def render_environment_banner():
 
 # =============================================================================
 # CACHED RAG HELPERS (Important for performance)
+# These are now defensive so they don't crash when RAG modules failed to import.
 # =============================================================================
 
 @st.cache_resource
 def get_cached_vectorstore():
     """Cache the heavy Chroma vectorstore + embedding model."""
-    return get_vectorstore()
+    if not RAG_AVAILABLE:
+        return None
+    try:
+        return get_vectorstore()
+    except Exception:
+        return None
 
 
 @st.cache_resource
 def get_cached_embedding_model():
     """Cache the embedding model."""
-    from utils.rag_engine import get_embedding_model
-    return get_embedding_model()
+    if not RAG_AVAILABLE:
+        return None
+    try:
+        from utils.rag_engine import get_embedding_model
+        return get_embedding_model()
+    except Exception:
+        return None
 
 
 def is_vectorstore_ready() -> bool:
     """Check if the vector store has been populated (uses cached store)."""
+    if not RAG_AVAILABLE:
+        return False
     try:
         vs = get_cached_vectorstore()
+        if vs is None:
+            return False
         count = vs._collection.count()
         return count > 0
     except Exception:
@@ -120,8 +156,12 @@ def is_vectorstore_ready() -> bool:
 
 def get_vectorstore_stats() -> dict:
     """Get stats from the cached vectorstore."""
+    if not RAG_AVAILABLE:
+        return {"error": "RAG modules not available", "is_ready": False}
     try:
         vs = get_cached_vectorstore()
+        if vs is None:
+            return {"error": "Vectorstore not loaded", "is_ready": False}
         count = vs._collection.count()
         return {
             "document_count": count,
@@ -1578,16 +1618,35 @@ def compute_element_scores(audits: list) -> dict:
 
 def render_knowledge_base(context):
     st.markdown("## 📚 Knowledge Base — Tanya Playbook CX InJourney")
-    
+
+    if not RAG_AVAILABLE:
+        st.error("❌ Fitur Knowledge Base (RAG + AI) tidak tersedia di environment ini.")
+        st.markdown(
+            "Penyebab paling umum: konflik versi **protobuf** dengan `chromadb` / `sentence-transformers` "
+            "pada Streamlit Community Cloud (free tier)."
+        )
+        st.info(
+            "Daily Service QC (Harian) di tab terakhir **tetap berfungsi penuh** (facility checks, complaints, issues + foto, export PDF/Excel)."
+        )
+        with st.expander("Detail error (untuk developer)"):
+            st.code(RAG_IMPORT_ERROR or "Unknown import error", language="text")
+        st.markdown("**Workaround yang sudah diterapkan di kode ini:**")
+        st.markdown("- Pin `protobuf>=3.19.0,<4.25` di requirements.txt")
+        st.markdown("- Import RAG dibuat non-fatal supaya app tetap jalan")
+        return
+
     env = get_environment_status()
     
     if not context["rag_ready"]:
         st.error("Knowledge Base belum diinisialisasi.")
         if st.button("🚀 Inisialisasi RAG Sekarang (Ingest 6 PDF)", type="primary"):
             with st.spinner("Sedang memproses 6 PDF Playbook..."):
-                result = ingest_playbooks(force_rebuild=False)
-                st.success(str(result))
-                st.rerun()
+                if RAG_AVAILABLE:
+                    result = ingest_playbooks(force_rebuild=False)
+                    st.success(str(result))
+                    st.rerun()
+                else:
+                    st.error("RAG modules tidak tersedia.")
         return
     
     # Status informasi yang lebih bersih
