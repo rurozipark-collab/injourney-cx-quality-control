@@ -1663,68 +1663,6 @@ def render_knowledge_base(context):
     st.caption("Jika suatu saat butuh fitur AI lagi, kita bisa tambahkan kembali dengan dependencies terpisah.")
     return
 
-    env = get_environment_status()
-    
-    if not context["rag_ready"]:
-        st.error("Knowledge Base belum diinisialisasi.")
-        if st.button("🚀 Inisialisasi RAG Sekarang (Ingest 6 PDF)", type="primary"):
-            with st.spinner("Sedang memproses 6 PDF Playbook..."):
-                if RAG_AVAILABLE:
-                    result = ingest_playbooks(force_rebuild=False)
-                    st.success(str(result))
-                    st.rerun()
-                else:
-                    st.error("RAG modules tidak tersedia.")
-        return
-    
-    # Status informasi yang lebih bersih
-    if env["has_openai_key"]:
-        st.success("✅ Chat dengan LLM aktif")
-    else:
-        # Minimal message - only in expander to keep UI clean
-        with st.expander("ℹ️ Tentang fitur Chat"):
-            st.caption("Fitur chat otomatis dengan AI tidak aktif karena belum ada OpenAI API Key. Pencarian dokumen tetap berfungsi normal.")
-    
-    st.caption("Tanyakan apa saja tentang standar CX InJourney. Jawaban diambil langsung dari 6 dokumen resmi.")
-    
-    question = st.text_input(
-        "Pertanyaan Anda",
-        placeholder="Contoh: Apa definisi Safe Space menurut People Pillar?",
-        key="kb_question"
-    )
-    
-    col1, col2 = st.columns([1, 3])
-    with col1:
-        k = st.slider("Jumlah konteks diambil (k)", 3, 10, 5)
-    
-    if st.button("🔍 Cari & Jawab", type="primary") and question.strip():
-        with st.spinner("Mencari di seluruh playbook..."):
-            docs = retrieve_context(question, k=k)
-            
-            if not env["has_openai_key"]:
-                # Mode tanpa LLM - hanya tampilkan konteks terbaik
-                st.markdown("### 📖 Hasil Pencarian dari Playbook (Mode Lokal)")
-                st.caption("Karena belum ada OpenAI key, sistem hanya menampilkan potongan dokumen paling relevan.")
-                
-                for i, d in enumerate(docs, 1):
-                    with st.container():
-                        st.markdown(f"**Sumber: {d.metadata.get('source')} — Halaman {d.metadata.get('page')}**")
-                        st.markdown(d.page_content[:1200] + ("..." if len(d.page_content) > 1200 else ""))
-                        st.divider()
-            else:
-                try:
-                    answer = ask_playbook_question(question, docs)
-                    st.markdown("### 💬 Jawaban dari LLM")
-                    st.markdown(f"<div class='cx-card'>{answer}</div>", unsafe_allow_html=True)
-                except Exception as e:
-                    st.error(f"Gagal menghubungi OpenAI: {e}")
-        
-        if env["has_openai_key"]:
-            with st.expander("📖 Lihat sumber konteks yang digunakan"):
-                for d in docs:
-                    st.markdown(f"**[{d.metadata.get('source')}, Hal. {d.metadata.get('page')}]**")
-                    st.caption(d.page_content[:650] + "...")
-
 
 # =============================================================================
 # LAPORAN & EXPORT
