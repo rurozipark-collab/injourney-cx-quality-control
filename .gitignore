@@ -1,0 +1,60 @@
+# InJourney CX Quality Control - Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Environment variables
+.env
+.env.local
+
+# ChromaDB vector store (can be regenerated)
+chroma_db/
+
+# Large uploaded evidence files (optional - remove if you want to commit them)
+reports/evidence/*
+!reports/evidence/.gitkeep
+
+# Audit JSON files (can be regenerated or kept)
+reports/audits/*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

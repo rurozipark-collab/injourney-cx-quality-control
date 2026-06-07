@@ -1,0 +1,45 @@
+# InJourney Airports CX Quality Control
+# Requirements - Streamlit + RAG + Professional Reporting
+
+# Core Web Framework
+streamlit>=1.32.0
+streamlit-extras>=0.4.0
+
+# RAG & LLM Stack (LangChain + ChromaDB)
+langchain>=0.2.0
+langchain-community>=0.2.0
+langchain-chroma>=0.1.0
+langchain-text-splitters>=0.2.0
+chromadb>=0.5.0
+sentence-transformers>=3.0.0
+
+# PDF Processing
+pdfplumber>=0.11.0
+pymupdf>=1.24.0
+
+# PDF Export (Beautiful professional reports)
+reportlab>=4.2.0
+
+# Excel Export
+openpyxl>=3.1.0
+pandas>=2.2.0
+xlsxwriter>=3.2.0
+
+# Visualization
+plotly>=5.22.0
+
+# Utilities
+python-dotenv>=1.0.0
+Pillow>=10.3.0
+python-dateutil>=2.9.0
+pydantic>=2.7.0
+
+# LLM & Embeddings Providers
+langchain-openai>=0.1.0
+openai>=1.30.0
+
+# For better local embeddings (recommended)
+langchain-huggingface>=0.0.3
+
+# Optional: For local LLM via Ollama
+# langchain-ollama>=0.1.0

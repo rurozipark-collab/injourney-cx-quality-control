@@ -1,0 +1,102 @@
+{
+  "audit_id": "AUD-20260527-0A7BED3F",
+  "airport": "Soekarno-Hatta (CGK) - Terminal 3",
+  "auditor": "Auditor CX",
+  "audit_date": "2026-05-27",
+  "checklist_items": [
+    {
+      "id": "p1",
+      "pillar": "People",
+      "element": "Safe Space",
+      "item": "Petugas memberikan rasa aman dan nyaman kepada penumpang di seluruh area terminal",
+      "weight": 1.0
+    },
+    {
+      "id": "p2",
+      "pillar": "People",
+      "element": "Positive Interaction",
+      "item": "Interaksi petugas dengan penumpang bersifat ramah, empati, dan profesional",
+      "weight": 1.0
+    },
+    {
+      "id": "p3",
+      "pillar": "People",
+      "element": "Professionalism",
+      "item": "Penampilan dan sikap petugas sesuai standar seragam & grooming InJourney",
+      "weight": 0.8
+    },
+    {
+      "id": "pr1",
+      "pillar": "Premises",
+      "element": "Clean Environment",
+      "item": "Kebersihan area check-in, ruang tunggu, toilet, dan koridor terjaga dengan baik",
+      "weight": 1.0
+    },
+    {
+      "id": "pr2",
+      "pillar": "Premises",
+      "element": "Comfort & Facilities",
+      "item": "Fasilitas umum (charging station, seating, AC, WiFi) dalam kondisi baik dan memadai",
+      "weight": 0.9
+    },
+    {
+      "id": "pr3",
+      "pillar": "Premises",
+      "element": "Wayfinding & Signage",
+      "item": "Penanda arah dan informasi visual jelas, konsisten, dan mudah dipahami",
+      "weight": 0.85
+    },
+    {
+      "id": "ps1",
+      "pillar": "Process",
+      "element": "Clear Information",
+      "item": "Informasi penerbangan, boarding, dan delay disampaikan secara jelas dan real-time",
+      "weight": 1.0
+    },
+    {
+      "id": "ps2",
+      "pillar": "Process",
+      "element": "Efficient Flow",
+      "item": "Alur penumpang (check-in → security → boarding) berjalan lancar tanpa bottleneck berlebih",
+      "weight": 0.95
+    },
+    {
+      "id": "ps3",
+      "pillar": "Process",
+      "element": "Service Consistency",
+      "item": "Standar pelayanan diterapkan secara konsisten di seluruh titik kontak",
+      "weight": 0.9
+    }
+  ],
+  "scores": {
+    "p1": 4,
+    "p2": 4,
+    "p3": 4,
+    "pr1": 4,
+    "pr2": 4,
+    "pr3": 4,
+    "ps1": 4,
+    "ps2": 4,
+    "ps3": 4
+  },
+  "comments": {
+    "p1": "",
+    "p2": "",
+    "p3": "",
+    "pr1": "",
+    "pr2": "",
+    "pr3": "",
+    "ps1": "",
+    "ps2": "",
+    "ps3": ""
+  },
+  "pillar_scores": {
+    "People": 4.0,
+    "Premises": 4.0,
+    "Process": 4.0
+  },
+  "overall_score": 4.0,
+  "recommendations": [],
+  "evidence_folder": "/Users/fahrurozi/injourney-cx-quality-control/reports/evidence/AUD-20260527-0A7BED3F",
+  "saved_at": "2026-05-27T23:37:35.667644"
+}

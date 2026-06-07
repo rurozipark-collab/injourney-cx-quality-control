@@ -1,0 +1,38 @@
+{
+  "audit_id": "AUD-20250525-DPS01",
+  "airport": "Ngurah Rai (DPS)",
+  "auditor": "Andi Pratama",
+  "audit_date": "2025-05-25",
+  "checklist_items": [
+    {"id": "p1", "pillar": "People", "element": "Safe Space", "item": "Petugas memberikan rasa aman dan nyaman kepada penumpang di seluruh area terminal", "weight": 1.0},
+    {"id": "p2", "pillar": "People", "element": "Positive Interaction", "item": "Interaksi petugas dengan penumpang bersifat ramah, empati, dan profesional", "weight": 1.0},
+    {"id": "p3", "pillar": "People", "element": "Professionalism", "item": "Penampilan dan sikap petugas sesuai standar seragam & grooming InJourney", "weight": 0.8},
+    {"id": "pr1", "pillar": "Premises", "element": "Clean Environment", "item": "Kebersihan area check-in, ruang tunggu, toilet, dan koridor terjaga dengan baik", "weight": 1.0},
+    {"id": "pr2", "pillar": "Premises", "element": "Comfort & Facilities", "item": "Fasilitas umum (charging station, seating, AC, WiFi) dalam kondisi baik dan memadai", "weight": 0.9},
+    {"id": "pr3", "pillar": "Premises", "element": "Wayfinding & Signage", "item": "Penanda arah dan informasi visual jelas, konsisten, dan mudah dipahami", "weight": 0.85},
+    {"id": "ps1", "pillar": "Process", "element": "Clear Information", "item": "Informasi penerbangan, boarding, dan delay disampaikan secara jelas dan real-time", "weight": 1.0},
+    {"id": "ps2", "pillar": "Process", "element": "Efficient Flow", "item": "Alur penumpang (check-in \u2192 security \u2192 boarding) berjalan lancar tanpa bottleneck berlebih", "weight": 0.95},
+    {"id": "ps3", "pillar": "Process", "element": "Service Consistency", "item": "Standar pelayanan diterapkan secara konsisten di seluruh titik kontak", "weight": 0.9}
+  ],
+  "scores": {
+    "p1": 5, "p2": 5, "p3": 4,
+    "pr1": 5, "pr2": 4, "pr3": 5,
+    "ps1": 5, "ps2": 4, "ps3": 5
+  },
+  "comments": {
+    "p2": "Petugas sangat ramah, terutama di area check-in.",
+    "pr2": "WiFi di terminal internasional agak lambat.",
+    "ps2": "Alur sangat lancar, security cepat."
+  },
+  "pillar_scores": {
+    "People": 4.67,
+    "Premises": 4.67,
+    "Process": 4.67
+  },
+  "overall_score": 4.67,
+  "recommendations": [
+    {"pillar": "Premises", "item": "Fasilitas umum (charging station, seating, AC, WiFi) dalam kondisi baik dan memadai", "score": 4, "suggestion": "Upgrade bandwidth WiFi di terminal internasional."}
+  ],
+  "saved_at": "2025-05-25T11:15:00",
+  "evidence_folder": ""
+}

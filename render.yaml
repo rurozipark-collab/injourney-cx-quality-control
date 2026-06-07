@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: injourney-cx-quality-control
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter  # or free, but for disk we need at least starter/hobby
+    region: oregon  # or frankfurt, etc. Choose close to user if possible
+    autoDeploy: true
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: DATA_DIR
+        value: /data
+      # Add your secrets here when deploying:
+      # - key: OPENAI_API_KEY
+      #   sync: false
+    # Persistent disk mounted at /data (used for reports/ + chroma_db/ via DATA_DIR)
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1  # Start small; increase as daily reports, photos, and vector DB grow
+
+# Note: With DATA_DIR=/data the code will store daily_qc JSONs, audits, evidence, and chroma_db under the mounted disk.
+# This survives deploys and restarts (on paid plan). Free plan has limitations on disk.
+
+# To deploy:
+# 1. Push this repo to GitHub.
+# 2. Go to Render.com, New > Blueprint, connect the repo, use this render.yaml.
+# 3. Add any secret env vars (OPENAI_API_KEY if used).
+# 4. After deploy, the URL will be stable like https://injourney-cx-quality-control.onrender.com
+# 5. For iPhone PWA: open the URL in Safari → Add to Home Screen. It will work as before.

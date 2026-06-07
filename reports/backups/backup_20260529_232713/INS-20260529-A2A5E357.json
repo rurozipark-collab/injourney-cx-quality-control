@@ -1,0 +1,544 @@
+{
+  "audit_id": "INS-20260529-A2A5E357",
+  "airport": "Soekarno-Hatta (CGK)",
+  "terminal": "Terminal 1 - C",
+  "auditor": "Fahrurozi",
+  "audit_date": "2026-05-29",
+  "checklist_items": [
+    {
+      "id": "p01",
+      "pillar": "People",
+      "element": "General Wellness",
+      "item": "Kebersihan dan kerapian pribadi secara keseluruhan (tidak ada bau badan, bau mulut, atau keringat berlebih; tubuh, tangan, dan kaki bersih)",
+      "weight": 1.0
+    },
+    {
+      "id": "p02",
+      "pillar": "People",
+      "element": "General Wellness",
+      "item": "Kondisi kuku tangan dan kaki (pendek, rapi, bersih, tidak ada kotoran, tidak menggunakan cat kuku mencolok atau nail art)",
+      "weight": 0.9
+    },
+    {
+      "id": "p03",
+      "pillar": "People",
+      "element": "General Wellness",
+      "item": "Kebersihan wajah, gigi, dan nafas (wajah segar dan bersih dari minyak berlebih, gigi bersih, nafas segar)",
+      "weight": 0.85
+    },
+    {
+      "id": "p04",
+      "pillar": "People",
+      "element": "Hair & Personal Presentation",
+      "item": "Kerapian dan model rambut Pria (pendek, rapi, model Fade/Taper halus sesuai panduan; tidak ada punk, spiky, skin-cropped berlebihan, atau undercut)",
+      "weight": 0.9
+    },
+    {
+      "id": "p05",
+      "pillar": "People",
+      "element": "Hair & Personal Presentation",
+      "item": "Kerapian dan penataan rambut Wanita (jika panjang: disanggul rapi dengan Chignon/French Twist; jika pendek: rapi tidak menyentuh bahu; warna natural hitam/coklat tua, tanpa highlight)",
+      "weight": 0.9
+    },
+    {
+      "id": "p06",
+      "pillar": "People",
+      "element": "Hair & Personal Presentation",
+      "item": "Penggunaan make-up dan parfum (make-up natural & profesional, tidak berlebihan; parfum wangi ringan - citrus/aquatic/woody, tidak menyengat)",
+      "weight": 0.8
+    },
+    {
+      "id": "p07",
+      "pillar": "People",
+      "element": "Uniform & Attire",
+      "item": "Kondisi dan cara pemakaian seragam (lengkap, rapi, disetrika, tidak kusut; jas dikancing dengan benar; kemeja dimasukkan ke dalam celana/rok)",
+      "weight": 1.0
+    },
+    {
+      "id": "p08",
+      "pillar": "People",
+      "element": "Uniform & Attire",
+      "item": "Kelengkapan dan kerapian atribut seragam (Name tag/ID Card terpasang benar dan terlihat jelas; dasi/scarf rapi dan posisi tepat; sepatu pantofel hitam formal bersih)",
+      "weight": 0.95
+    },
+    {
+      "id": "p09",
+      "pillar": "People",
+      "element": "Uniform & Attire",
+      "item": "Penggunaan rok/celana sesuai ketentuan (rok pendek 5 cm di bawah lutut, rok panjang mencapai mata kaki; celana tepat panjangnya; selalu menggunakan sabuk)",
+      "weight": 0.85
+    },
+    {
+      "id": "p10",
+      "pillar": "People",
+      "element": "Accessories & Attributes",
+      "item": "Penggunaan aksesoris sesuai batas (maksimal 5 titik di seluruh tubuh; cincin maksimal 1 dan ukuran kecil; kalung tidak terlihat di luar seragam)",
+      "weight": 0.8
+    },
+    {
+      "id": "p11",
+      "pillar": "People",
+      "element": "Accessories & Attributes",
+      "item": "Penggunaan kerudung bagi yang memakai (rapi, kuat, menutupi seluruh rambut dan leher dengan baik; menggunakan ciput; aksesoris minimal dan serasi dengan seragam)",
+      "weight": 0.85
+    },
+    {
+      "id": "p12",
+      "pillar": "People",
+      "element": "Body Language & Posture",
+      "item": "Postur tubuh dan bahasa tubuh profesional (berdiri tegak dengan bahu rileks; tidak membungkuk, tidak silang tangan di dada, tidak memasukkan tangan ke saku saat berinteraksi)",
+      "weight": 1.0
+    },
+    {
+      "id": "p13",
+      "pillar": "People",
+      "element": "Facial Expression & Eye Contact",
+      "item": "Ekspresi wajah dan kontak mata (menampilkan senyum tulus dan ramah; kontak mata natural saat berbicara; tidak menunjukkan wajah datar, kesal, atau sinis)",
+      "weight": 1.0
+    },
+    {
+      "id": "p14",
+      "pillar": "People",
+      "element": "Communication & Interaction",
+      "item": "Penggunaan komunikasi verbal & non-verbal sesuai panduan (menggunakan dua tangan saat menerima/menyerahkan dokumen; telapak tangan terbuka saat menunjuk arah; intonasi tenang dan jelas)",
+      "weight": 0.95
+    },
+    {
+      "id": "p15",
+      "pillar": "People",
+      "element": "Professional Ethics & Conduct",
+      "item": "Etika perilaku saat bertugas (tidak menggunakan ponsel/earphone di area publik; tidak makan/minum di tempat terlarang; tidak berjalan berkelompok sambil berbicara keras)",
+      "weight": 0.9
+    },
+    {
+      "id": "pr01",
+      "pillar": "Premises",
+      "element": "Public Spaces & Outdoor",
+      "item": "Jalur pedestrian bersih, memiliki pencahayaan yang memadai, permukaan anti-slip, dan dilengkapi peneduh dari cuaca ekstrem",
+      "weight": 1.0
+    },
+    {
+      "id": "pr02",
+      "pillar": "Premises",
+      "element": "Public Spaces & Outdoor",
+      "item": "Area landscape/outdoor (taman, tanaman, instalasi seni) terawat dengan baik, menggunakan tanaman khas lokal, dan bebas dari sampah",
+      "weight": 0.9
+    },
+    {
+      "id": "pr03",
+      "pillar": "Premises",
+      "element": "Public Spaces & Outdoor",
+      "item": "Fasilitas umum di area outdoor (tempat duduk, tempat sampah, peneduh) tersedia dalam jumlah cukup, nyaman, dan mudah dijangkau penumpang",
+      "weight": 0.85
+    },
+    {
+      "id": "pr04",
+      "pillar": "Premises",
+      "element": "Parking & Curbside",
+      "item": "Area drop-off/pick-up memiliki marka yang jelas, sistem antrian teratur, dan tidak menimbulkan kemacetan berlebih pada jam sibuk",
+      "weight": 1.0
+    },
+    {
+      "id": "pr05",
+      "pillar": "Premises",
+      "element": "Parking & Curbside",
+      "item": "Area parkir memiliki pencahayaan yang baik, CCTV yang berfungsi, dan sistem pembayaran/tiket yang operasional dengan baik",
+      "weight": 0.95
+    },
+    {
+      "id": "pr06",
+      "pillar": "Premises",
+      "element": "Parking & Curbside",
+      "item": "Petunjuk arah dari area parkir dan curbside menuju terminal jelas, konsisten, dan mudah diikuti oleh pengemudi maupun penumpang",
+      "weight": 0.9
+    },
+    {
+      "id": "pr07",
+      "pillar": "Premises",
+      "element": "Customer Facilities",
+      "item": "Toilet umum bersih, terawat, dilengkapi perlengkapan lengkap (tisu, sabun, hand dryer), dan semua fixture berfungsi dengan baik",
+      "weight": 1.0
+    },
+    {
+      "id": "pr08",
+      "pillar": "Premises",
+      "element": "Customer Facilities",
+      "item": "Area tempat duduk, charging station, dan ruang tunggu dalam kondisi baik, jumlahnya memadai, serta bersih dan nyaman digunakan",
+      "weight": 0.95
+    },
+    {
+      "id": "pr09",
+      "pillar": "Premises",
+      "element": "Customer Facilities",
+      "item": "Fasilitas self-service (self bag drop, self check-in) beroperasi dengan baik, memiliki petunjuk yang jelas, dan mudah digunakan penumpang",
+      "weight": 0.9
+    },
+    {
+      "id": "pr10",
+      "pillar": "Premises",
+      "element": "Special Needs & Inclusive",
+      "item": "Fasilitas untuk penumpang disabilitas (ramp, toilet accessible, jalur prioritas, lift) tersedia, berfungsi baik, dan jelas penandaannya",
+      "weight": 1.0
+    },
+    {
+      "id": "pr11",
+      "pillar": "Premises",
+      "element": "Special Needs & Inclusive",
+      "item": "Ruang keluarga/nursing room dan fasilitas untuk lansia serta anak-anak tersedia, bersih, nyaman, dan mudah diakses",
+      "weight": 0.95
+    },
+    {
+      "id": "pr12",
+      "pillar": "Premises",
+      "element": "Special Needs & Inclusive",
+      "item": "Trolley dan layanan bantuan khusus untuk penumpang berkebutuhan khusus tersedia di titik-titik strategis dan mudah diperoleh",
+      "weight": 0.9
+    },
+    {
+      "id": "pr13",
+      "pillar": "Premises",
+      "element": "Safety & Security",
+      "item": "Sistem keselamatan (pencahayaan darurat, rambu evakuasi, alat pemadam api) terlihat jelas, tidak terhalang, dan dalam kondisi siap pakai",
+      "weight": 1.0
+    },
+    {
+      "id": "pr14",
+      "pillar": "Premises",
+      "element": "Safety & Security",
+      "item": "Permukaan lantai di area publik menggunakan material anti-slip yang sesuai, terutama di zona basah atau rawan tumpahan cairan",
+      "weight": 0.95
+    },
+    {
+      "id": "pr15",
+      "pillar": "Premises",
+      "element": "Safety & Security",
+      "item": "Area fasilitas umum memiliki cakupan CCTV yang memadai dengan kualitas gambar yang baik dan sistem berfungsi normal",
+      "weight": 0.9
+    },
+    {
+      "id": "pr16",
+      "pillar": "Premises",
+      "element": "Wayfinding & Signage",
+      "item": "Sistem signage dan wayfinding di seluruh terminal konsisten, mudah dipahami (Indonesia & Inggris), serta ditempatkan di lokasi strategis",
+      "weight": 1.0
+    },
+    {
+      "id": "pr17",
+      "pillar": "Premises",
+      "element": "Wayfinding & Signage",
+      "item": "Flight Information Display System (FIDS) dan peta digital berfungsi dengan baik serta menampilkan informasi yang akurat dan real-time",
+      "weight": 0.95
+    },
+    {
+      "id": "pr18",
+      "pillar": "Premises",
+      "element": "Wayfinding & Signage",
+      "item": "Lokasi information desk/help point mudah terlihat, memberikan pelayanan yang responsif, dan memiliki petugas yang siap membantu",
+      "weight": 0.9
+    },
+    {
+      "id": "ps01",
+      "pillar": "Process",
+      "element": "Pre-Journey & Digital",
+      "item": "Informasi penerbangan, jadwal, dan prosedur tersedia akurat, lengkap, dan mudah diakses melalui website, aplikasi, dan channel digital lainnya",
+      "weight": 1.0
+    },
+    {
+      "id": "ps02",
+      "pillar": "Process",
+      "element": "Pre-Journey & Digital",
+      "item": "Proses online check-in dan pembayaran berjalan lancar dengan instruksi yang jelas serta konfirmasi yang andal",
+      "weight": 0.95
+    },
+    {
+      "id": "ps03",
+      "pillar": "Process",
+      "element": "Pre-Journey & Digital",
+      "item": "Update status penerbangan dan informasi penting tersedia secara real-time dan konsisten di berbagai platform digital",
+      "weight": 0.9
+    },
+    {
+      "id": "ps04",
+      "pillar": "Process",
+      "element": "Arrival & Ground Transport",
+      "item": "Proses drop-off/curbside berjalan efisien, aman, dan tidak menimbulkan kemacetan atau antrian berlebihan",
+      "weight": 0.95
+    },
+    {
+      "id": "ps05",
+      "pillar": "Process",
+      "element": "Arrival & Ground Transport",
+      "item": "Petunjuk arah dan informasi dari area drop-off/transportasi umum menuju terminal jelas, mudah diikuti, dan tersedia dalam berbagai bahasa",
+      "weight": 0.9
+    },
+    {
+      "id": "ps06",
+      "pillar": "Process",
+      "element": "Check-in & Baggage",
+      "item": "Waktu tunggu di check-in counter dan bag drop dalam batas wajar serta sesuai standar operasional",
+      "weight": 1.0
+    },
+    {
+      "id": "ps07",
+      "pillar": "Process",
+      "element": "Check-in & Baggage",
+      "item": "Prosedur check-in, verifikasi dokumen, dan penanganan bagasi dilakukan secara konsisten dan profesional oleh petugas",
+      "weight": 0.95
+    },
+    {
+      "id": "ps08",
+      "pillar": "Process",
+      "element": "Check-in & Baggage",
+      "item": "Penanganan penumpang dengan kebutuhan khusus (disabilitas, lansia, unaccompanied minor, dll) dilakukan secara efisien dan dengan prioritas yang tepat",
+      "weight": 0.9
+    },
+    {
+      "id": "ps09",
+      "pillar": "Process",
+      "element": "Security & Immigration",
+      "item": "Proses screening keamanan berjalan efisien dengan pengelolaan antrian yang baik dan waktu tunggu yang minim",
+      "weight": 1.0
+    },
+    {
+      "id": "ps10",
+      "pillar": "Process",
+      "element": "Security & Immigration",
+      "item": "Instruksi dan prosedur keamanan serta imigrasi disampaikan dengan jelas, sopan, dan mudah dipahami oleh penumpang",
+      "weight": 0.95
+    },
+    {
+      "id": "ps11",
+      "pillar": "Process",
+      "element": "Security & Immigration",
+      "item": "Jalur khusus (fast track, crew, disabilitas, diplomat) dikelola dengan baik dan tidak mengganggu alur penumpang reguler",
+      "weight": 0.85
+    },
+    {
+      "id": "ps12",
+      "pillar": "Process",
+      "element": "Boarding & Departure",
+      "item": "Proses boarding dilakukan secara terorganisir, tepat waktu, dan sesuai urutan yang telah diumumkan",
+      "weight": 1.0
+    },
+    {
+      "id": "ps13",
+      "pillar": "Process",
+      "element": "Boarding & Departure",
+      "item": "Pengumuman di gate jelas, tepat waktu, dan memberikan informasi yang cukup bagi penumpang",
+      "weight": 0.9
+    },
+    {
+      "id": "ps14",
+      "pillar": "Process",
+      "element": "Baggage Claim & Arrival",
+      "item": "Waktu tunggu bagasi di baggage claim dalam batas wajar dengan informasi status bagasi yang jelas dan akurat",
+      "weight": 0.95
+    },
+    {
+      "id": "ps15",
+      "pillar": "Process",
+      "element": "Baggage Claim & Arrival",
+      "item": "Proses klaim bagasi hilang/rusak/terlambat jelas, responsif, dan mudah diakses oleh penumpang",
+      "weight": 0.85
+    }
+  ],
+  "scores": {
+    "p01": 4,
+    "p02": 4,
+    "p03": 3,
+    "p04": 4,
+    "p05": 4,
+    "p06": 2,
+    "p07": 2,
+    "p08": 2,
+    "p09": 4,
+    "p10": 4,
+    "p11": 4,
+    "p12": 4,
+    "p13": 2,
+    "p14": 4,
+    "p15": 1,
+    "ps01": 4,
+    "ps02": 4,
+    "ps03": 4,
+    "ps04": 4,
+    "ps05": 4,
+    "ps06": 4,
+    "ps07": 4,
+    "ps08": 2,
+    "ps09": 4,
+    "ps10": 4,
+    "ps11": 4,
+    "ps12": 2,
+    "ps13": 1,
+    "ps14": 4,
+    "ps15": 4,
+    "pr01": 4,
+    "pr02": 2,
+    "pr03": 4,
+    "pr04": 3,
+    "pr05": 4,
+    "pr06": 4,
+    "pr07": 3,
+    "pr08": 4,
+    "pr09": 4,
+    "pr10": 2,
+    "pr11": 4,
+    "pr12": 2,
+    "pr13": 4,
+    "pr14": 3,
+    "pr15": 4,
+    "pr16": 4,
+    "pr17": 4,
+    "pr18": 4
+  },
+  "comments": {
+    "p01": "oke \n",
+    "p02": "oke ",
+    "p03": "tidak semua karyawan memenuhi unsur yang dimaksud",
+    "p04": "oke ",
+    "p05": "oke",
+    "p06": "tidak semua karyawan, hasil dari pengecekan yang kami lakukan hanya 5 orang memiliki aroma yang tidak menyengat",
+    "p07": "untuk TSS masih banyak karyawan yang tidak memperhatikan hal ini ",
+    "p08": "Sepatu running banyak digunakan",
+    "p09": "oke ",
+    "p10": "oke ",
+    "p11": "oke",
+    "p12": "oke ",
+    "p13": "belum semua karyawan menerapkan tindakan tersebut",
+    "p14": "okee",
+    "p15": "untuk TSS masih di temukan beberapa berjalan berkelompok walaupun tidak berbicara keras",
+    "ps01": "oke ",
+    "ps02": "oke ",
+    "ps03": "oke ",
+    "ps04": "oke ",
+    "ps05": "oke ",
+    "ps06": "oke",
+    "ps07": "good ",
+    "ps08": "terkadang penumpang disabilitas dan lansia tidak cepat ditindaklanjuti oleh petugas maskapai sehingga pihak keluarga penumpang harus menemui petugas counter check in terlebih dahulu baru dibantu dengan kursi roda",
+    "ps09": "ok",
+    "ps10": "ok",
+    "ps11": "ok",
+    "ps12": "sebagian besar pihak lion grou sering delay",
+    "ps13": "petugas tidak aktif memberikan informasi terkait jam keberangkatan yang aktual dan pasti ",
+    "ps14": "oke ",
+    "ps15": "oke ",
+    "pr01": "oke ",
+    "pr02": "area pedestrian di jalur kanopi outdoor banyak sampah liar ",
+    "pr03": "oke ",
+    "pr04": "banyak marka yang sudah mulai memudar ",
+    "pr05": "oke ",
+    "pr06": "oke ",
+    "pr07": "perlu edukasi rutin terhadap petuagas cleaner agar selalu sigap terkait kebutuhan toilet, terutama pada tissue yang selalu cepat habis ",
+    "pr08": "oke ",
+    "pr09": "oke ",
+    "pr10": "need improve, sebab tidak semua area mendukung untuk ramp ",
+    "pr11": "oke ",
+    "pr12": "tidak tersedia ",
+    "pr13": "oke ",
+    "pr14": "perlu kesiapan dari petugas tss dałam hal menyediakan karpet anti slip saat hujan deras turun ",
+    "pr15": "oke ",
+    "pr16": "oke ",
+    "pr17": "oke ",
+    "pr18": "oke "
+  },
+  "pillar_scores": {
+    "People": 3.19,
+    "Process": 3.54,
+    "Premises": 3.5
+  },
+  "overall_score": 3.41,
+  "recommendations": [
+    {
+      "pillar": "People",
+      "item": "Kebersihan wajah, gigi, dan nafas (wajah segar dan bersih dari minyak berlebih, gigi bersih, nafas segar)",
+      "score": 3,
+      "suggestion": "Tingkatkan konsistensi pada General Wellness."
+    },
+    {
+      "pillar": "People",
+      "item": "Penggunaan make-up dan parfum (make-up natural & profesional, tidak berlebihan; parfum wangi ringan - citrus/aquatic/woody, tidak menyengat)",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Hair & Personal Presentation. tidak semua karyawan, hasil dari pengecekan yang kami lakukan hanya 5 orang memiliki aroma yang tidak menyengat"
+    },
+    {
+      "pillar": "People",
+      "item": "Kondisi dan cara pemakaian seragam (lengkap, rapi, disetrika, tidak kusut; jas dikancing dengan benar; kemeja dimasukkan ke dalam celana/rok)",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Uniform & Attire. untuk TSS masih banyak karyawan yang tidak memperhatikan hal ini "
+    },
+    {
+      "pillar": "People",
+      "item": "Kelengkapan dan kerapian atribut seragam (Name tag/ID Card terpasang benar dan terlihat jelas; dasi/scarf rapi dan posisi tepat; sepatu pantofel hitam formal bersih)",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Uniform & Attire. Sepatu running banyak digunakan"
+    },
+    {
+      "pillar": "People",
+      "item": "Ekspresi wajah dan kontak mata (menampilkan senyum tulus dan ramah; kontak mata natural saat berbicara; tidak menunjukkan wajah datar, kesal, atau sinis)",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Facial Expression & Eye Contact. belum semua karyawan menerapkan tindakan tersebut"
+    },
+    {
+      "pillar": "People",
+      "item": "Etika perilaku saat bertugas (tidak menggunakan ponsel/earphone di area publik; tidak makan/minum di tempat terlarang; tidak berjalan berkelompok sambil berbicara keras)",
+      "score": 1,
+      "suggestion": "Perlu perbaikan mendesak pada: Professional Ethics & Conduct. untuk TSS masih di temukan beberapa berjalan berkelompok walaupun tidak berbicara keras"
+    },
+    {
+      "pillar": "Premises",
+      "item": "Area landscape/outdoor (taman, tanaman, instalasi seni) terawat dengan baik, menggunakan tanaman khas lokal, dan bebas dari sampah",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Public Spaces & Outdoor. area pedestrian di jalur kanopi outdoor banyak sampah liar "
+    },
+    {
+      "pillar": "Premises",
+      "item": "Area drop-off/pick-up memiliki marka yang jelas, sistem antrian teratur, dan tidak menimbulkan kemacetan berlebih pada jam sibuk",
+      "score": 3,
+      "suggestion": "Tingkatkan konsistensi pada Parking & Curbside."
+    },
+    {
+      "pillar": "Premises",
+      "item": "Toilet umum bersih, terawat, dilengkapi perlengkapan lengkap (tisu, sabun, hand dryer), dan semua fixture berfungsi dengan baik",
+      "score": 3,
+      "suggestion": "Tingkatkan konsistensi pada Customer Facilities."
+    },
+    {
+      "pillar": "Premises",
+      "item": "Fasilitas untuk penumpang disabilitas (ramp, toilet accessible, jalur prioritas, lift) tersedia, berfungsi baik, dan jelas penandaannya",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Special Needs & Inclusive. need improve, sebab tidak semua area mendukung untuk ramp "
+    },
+    {
+      "pillar": "Premises",
+      "item": "Trolley dan layanan bantuan khusus untuk penumpang berkebutuhan khusus tersedia di titik-titik strategis dan mudah diperoleh",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Special Needs & Inclusive. tidak tersedia "
+    },
+    {
+      "pillar": "Premises",
+      "item": "Permukaan lantai di area publik menggunakan material anti-slip yang sesuai, terutama di zona basah atau rawan tumpahan cairan",
+      "score": 3,
+      "suggestion": "Tingkatkan konsistensi pada Safety & Security."
+    },
+    {
+      "pillar": "Process",
+      "item": "Penanganan penumpang dengan kebutuhan khusus (disabilitas, lansia, unaccompanied minor, dll) dilakukan secara efisien dan dengan prioritas yang tepat",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Check-in & Baggage. terkadang penumpang disabilitas dan lansia tidak cepat ditindaklanjuti oleh petugas maskapai sehingga pihak keluarga penumpang harus menemui petugas counter check in terlebih dahulu baru dibantu dengan kursi roda"
+    },
+    {
+      "pillar": "Process",
+      "item": "Proses boarding dilakukan secara terorganisir, tepat waktu, dan sesuai urutan yang telah diumumkan",
+      "score": 2,
+      "suggestion": "Perlu perbaikan mendesak pada: Boarding & Departure. sebagian besar pihak lion grou sering delay"
+    },
+    {
+      "pillar": "Process",
+      "item": "Pengumuman di gate jelas, tepat waktu, dan memberikan informasi yang cukup bagi penumpang",
+      "score": 1,
+      "suggestion": "Perlu perbaikan mendesak pada: Boarding & Departure. petugas tidak aktif memberikan informasi terkait jam keberangkatan yang aktual dan pasti "
+    }
+  ],
+  "saved_at": "2026-05-29T23:26:52.188431"
+}
