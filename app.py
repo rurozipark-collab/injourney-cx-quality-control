@@ -2788,6 +2788,10 @@ def render_daily_service_qc(context):
         with st.form("add_facility_check", clear_on_submit=True):
             area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
             status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
+
+            # Visible feedback so user can see what they picked (mobile dropdown text can be hard to see)
+            st.caption(f"**Dipilih saat ini:** {area} — {status}")
+
             notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
 
             # Foto bukti via galeri (camera direct removed to keep app lighter on mobile)
@@ -2840,6 +2844,9 @@ def render_daily_service_qc(context):
             c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
             c_status = st.selectbox("Status Penanganan", ["Open", "In Progress", "Resolved"], key="comp_status")
 
+            # Visible feedback for mobile
+            st.caption(f"**Dipilih:** {c_area} — {c_cat} — {c_status}")
+
             if st.form_submit_button("➕ Catat Keluhan", type="primary"):
                 comp = {
                     "timestamp": datetime.now().isoformat(),
@@ -2886,6 +2893,9 @@ def render_daily_service_qc(context):
             i_pic = st.text_input("Penanggung Jawab (PIC)", key="issue_pic")
             i_due = st.date_input("Target Penyelesaian", value=datetime.now().date(), key="issue_due")
             i_status = st.selectbox("Status", ["Open", "In Progress", "Closed"], key="issue_status")
+
+            # Visible feedback for mobile
+            st.caption(f"**Dipilih:** {i_area} — {i_cat} — {i_rca} — {i_status}")
 
             submitted = st.form_submit_button("➕ Tambah Issue + RCA", type="primary")
 
