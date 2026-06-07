@@ -2807,19 +2807,18 @@ def render_daily_service_qc(context):
 
             notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
 
-            # Mobile-friendly photo capture - original with camera + galeri
+            # Foto Bukti via galeri (direct camera removed to keep app lighter on mobile)
             st.markdown("**Foto Bukti** (sangat disarankan)")
             photo_file = st.file_uploader("Pilih dari galeri", type=["png", "jpg", "jpeg"], key="fac_photo_file", label_visibility="collapsed")
-            camera_photo = st.camera_input("Ambil foto langsung dengan kamera HP", key="fac_camera")
 
             if st.form_submit_button("➕ Tambah / Update Pengecekan Area Ini", type="primary"):
-                photo = camera_photo or photo_file
+                photo = photo_file
                 entry = {
                     "timestamp": datetime.now().isoformat(),
                     "area": area,
                     "status": status,
                     "notes": notes.strip(),
-                    "photo_name": getattr(photo, 'name', 'camera_photo.jpg') if photo else None,
+                    "photo_name": getattr(photo, 'name', 'foto_bukti.jpg') if photo else None,
                     "photo_data": base64.b64encode(photo.getvalue()).decode() if photo else None
                 }
                 daily["facility_checks"] = [e for e in daily["facility_checks"] if e["area"] != area]
