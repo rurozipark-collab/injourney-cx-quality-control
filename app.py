@@ -857,12 +857,6 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"{APP_VERSION} • Powered by 6 Official CX Playbooks")
 
-        # RAG status: we force False at sidebar level to avoid triggering
-        # the heavy chromadb/sentence-transformers import during normal startup
-        # (Daily Service QC + most tabs don't need it).
-        # The Knowledge Base tab will attempt lazy load when the user opens it.
-        rag_ready = False
-
         return {
             "airport": airport,
             "terminal": terminal,
@@ -870,7 +864,6 @@ def render_sidebar():
             "inspector": auditor,   # alias for Daily QC
             "auditor": auditor,
             "audit_date": str(audit_date),
-            "rag_ready": rag_ready,
         }
 
 
@@ -1069,9 +1062,6 @@ def render_audit_form(context):
             st.session_state.pop("editing_audit", None)
             st.session_state.pop("editing_audit_id", None)
             st.rerun()
-    
-    if not context["rag_ready"]:
-        st.warning("⚠️ Knowledge Base belum siap. Beberapa rekomendasi mungkin kurang akurat.")
     
     # Use data from editing_audit if available, otherwise use sidebar context
     auditor_name = editing_audit.get("auditor", context['auditor']) if editing_audit else context['auditor']
