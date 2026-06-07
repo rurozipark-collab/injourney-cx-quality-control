@@ -2785,6 +2785,22 @@ def render_daily_service_qc(context):
             "Lift / Escalator", "Signage & Wayfinding", "Parking Area", "Other"
         ]
 
+        # Current list first (so new data is visible immediately after submit on mobile)
+        if daily["facility_checks"]:
+            st.markdown("**Pengecekan Hari Ini**")
+            for idx, item in enumerate(daily["facility_checks"]):
+                emoji = "🟢" if item["status"] == "Baik" else ("🟡" if "Minor" in item["status"] else "🔴")
+                with st.expander(f"{emoji} {item['area']} — {item['status']}", expanded=False):
+                    st.write(f"**Catatan:** {item['notes'] or '-'}")
+                    if item.get("photo_data"):
+                        st.image(base64.b64decode(item["photo_data"]), caption=item.get("photo_name"), width=280)
+                    if st.button("Hapus", key=f"del_fac_{idx}"):
+                        daily["facility_checks"].pop(idx)
+                        save_daily_qc(daily)
+                        st.rerun()
+        else:
+            st.info("Belum ada pengecekan fasilitas hari ini.")
+
         with st.form("add_facility_check", clear_on_submit=True):
             area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
             status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
@@ -2814,28 +2830,25 @@ def render_daily_service_qc(context):
                 st.success(f"✅ {area} dicatat sebagai {status}")
                 st.rerun()
 
-        # Current list with photo preview
-        if daily["facility_checks"]:
-            st.markdown("**Pengecekan Hari Ini**")
-            for idx, item in enumerate(daily["facility_checks"]):
-                emoji = "🟢" if item["status"] == "Baik" else ("🟡" if "Minor" in item["status"] else "🔴")
-                with st.expander(f"{emoji} {item['area']} — {item['status']}", expanded=False):
-                    st.write(f"**Catatan:** {item['notes'] or '-'}")
-                    if item.get("photo_data"):
-                        st.image(base64.b64decode(item["photo_data"]), caption=item.get("photo_name"), width=280)
-                    if st.button("Hapus", key=f"del_fac_{idx}"):
-                        daily["facility_checks"].pop(idx)
-                        save_daily_qc(daily)
-                        st.rerun()
-        else:
-            st.info("Belum ada pengecekan fasilitas hari ini.")
-
     # ========== COMPLAINTS ==========
     with tab_comp:
         st.subheader("Log Keluhan Pelanggan")
         st.caption("Catat keluhan yang diterima hari ini (dari penumpang atau observasi langsung).")
 
         complaint_cats = ["Cleanliness", "Facility", "Staff Attitude", "Information", "Queue / Waiting Time", "Signage", "Other"]
+
+        if daily["complaints"]:
+            for i, c in enumerate(daily["complaints"]):
+                emoji = "🟢" if c["status"] == "Resolved" else ("🟡" if c["status"] == "In Progress" else "🔴")
+                with st.expander(f"{emoji} [{c['area']}] {c['category']} — {c['status']}", expanded=False):
+                    st.write(f"**Deskripsi:** {c['description']}")
+                    st.write(f"**Tindakan hari ini:** {c['action_today'] or '-'}")
+                    if st.button("Hapus", key=f"del_comp_{i}"):
+                        daily["complaints"].pop(i)
+                        save_daily_qc(daily)
+                        st.rerun()
+        else:
+            st.info("Belum ada keluhan tercatat hari ini.")
 
         with st.form("add_complaint", clear_on_submit=True):
             c_area = st.selectbox("Area Terkait", facility_areas, key="comp_area")
@@ -2861,19 +2874,6 @@ def render_daily_service_qc(context):
                 st.success("Keluhan dicatat.")
                 st.rerun()
 
-        if daily["complaints"]:
-            for i, c in enumerate(daily["complaints"]):
-                emoji = "🟢" if c["status"] == "Resolved" else ("🟡" if c["status"] == "In Progress" else "🔴")
-                with st.expander(f"{emoji} [{c['area']}] {c['category']} — {c['status']}", expanded=False):
-                    st.write(f"**Deskripsi:** {c['description']}")
-                    st.write(f"**Tindakan hari ini:** {c['action_today'] or '-'}")
-                    if st.button("Hapus", key=f"del_comp_{i}"):
-                        daily["complaints"].pop(i)
-                        save_daily_qc(daily)
-                        st.rerun()
-        else:
-            st.info("Belum ada keluhan tercatat hari ini.")
-
     # ========== ISSUES + RCA ==========
     with tab_iss:
         st.subheader("⚠️ Issues, Root Cause & Tindak Lanjut")
@@ -2882,6 +2882,33 @@ def render_daily_service_qc(context):
         issue_cats = ["Cleanliness", "Facility Damage", "Staff / Service", "Process / Flow", "Information / Signage", "Safety", "Other"]
         rca_options = ["Belum diketahui", "Kurangnya cleaning", "Kerusakan fasilitas", "Proses tidak efisien", 
                        "Kurang koordinasi", "Kurang training staff", "Sistem / equipment error", "Lainnya"]
+
+        st.divider()
+
+        # List of issues first (so new data visible immediately after submit)
+        if daily["issues"]:
+            st.markdown("### Daftar Issue Hari Ini")
+
+            for idx, iss in enumerate(daily["issues"]):
+                status_emoji = "🟢" if iss["status"] == "Closed" else ("🟡" if iss["status"] == "In Progress" else "🔴")
+                header = f"{status_emoji} [{iss['area']}] {iss['category']} — {iss['status']}"
+
+                with st.container(border=True):
+                    st.markdown(f"**{header}**")
+                    st.write(f"**Deskripsi:** {iss['description']}")
+                    st.write(f"**Root Cause (saat ini):** {iss['root_cause']}")
+                    st.write(f"**Tindakan Segera:** {iss['immediate_action'] or '-'}")
+                    st.write(f"**PIC:** {iss['pic'] or '-'}  |  **Due:** {iss['due_date']}")
+
+                    if st.button("Hapus Issue", key=f"del_iss_{idx}", type="secondary"):
+                        daily["issues"].pop(idx)
+                        save_daily_qc(daily)
+                        st.rerun()
+
+                    st.markdown("")  # spacing
+
+        else:
+            st.info("Belum ada issue. Tambahkan melalui form di atas.")
 
         # Add new issue form
         with st.form("add_issue", clear_on_submit=True):
@@ -2915,33 +2942,6 @@ def render_daily_service_qc(context):
                 save_daily_qc(daily)
                 st.success("Issue berhasil dicatat.")
                 st.rerun()
-
-        st.divider()
-
-        # List of issues (simple, no AI)
-        if daily["issues"]:
-            st.markdown("### Daftar Issue Hari Ini")
-
-            for idx, iss in enumerate(daily["issues"]):
-                status_emoji = "🟢" if iss["status"] == "Closed" else ("🟡" if iss["status"] == "In Progress" else "🔴")
-                header = f"{status_emoji} [{iss['area']}] {iss['category']} — {iss['status']}"
-
-                with st.container(border=True):
-                    st.markdown(f"**{header}**")
-                    st.write(f"**Deskripsi:** {iss['description']}")
-                    st.write(f"**Root Cause (saat ini):** {iss['root_cause']}")
-                    st.write(f"**Tindakan Segera:** {iss['immediate_action'] or '-'}")
-                    st.write(f"**PIC:** {iss['pic'] or '-'}  |  **Due:** {iss['due_date']}")
-
-                    if st.button("Hapus Issue", key=f"del_iss_{idx}", type="secondary"):
-                        daily["issues"].pop(idx)
-                        save_daily_qc(daily)
-                        st.rerun()
-
-                    st.markdown("")  # spacing
-
-        else:
-            st.info("Belum ada issue. Tambahkan melalui form di atas.")
 
     # ========== SUMMARY & EXPORT ==========
     with tab_sum:
