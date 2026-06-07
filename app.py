@@ -2731,6 +2731,8 @@ def render_daily_service_qc(context):
     # Prominent stable link for sharing & PWA
     st.success("🔗 Link Permanen (bisa dibagikan & install di HP): https://injourney-cx-daily-qc.streamlit.app")
 
+    st.caption("⏱️ Loading pertama setelah idle di free tier bisa 15-40 detik (cold start). Setelah itu biasanya jauh lebih cepat. App ini sudah di-slim supaya lebih ringan.")
+
     # Mobile / PWA usage tip - iPhone focused. Now using the real stable URL.
     with st.expander("📱 Install sebagai App di iPhone (Bisa dari Mana Saja)", expanded=True):
         st.markdown("""
@@ -2751,6 +2753,8 @@ def render_daily_service_qc(context):
         - Tiap selesai hari, scroll ke bawah → tekan **"Export Daily Data (JSON for backup)"**.
         - Besok / setelah app restart → pakai **"Import Daily Data JSON"** untuk restore.
         - Data **hanya hilang** kalau kamu tekan "Mulai Hari Baru" atau tombol Hapus.
+
+        **Performa:** Loading pertama setelah idle (free tier) bisa 15-40 detik (cold start). Setelah itu biasanya cepat. App sudah di-slim dari dependency berat.
 
         Link ini stabil selamanya. Tidak perlu laptop nyala. Bisa dibagikan ke tim.
         """)

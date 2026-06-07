@@ -1,50 +1,32 @@
 # InJourney Airports CX Quality Control
-# Requirements - Streamlit + RAG + Professional Reporting
+# Slim requirements focused on Daily Service QC (Harian) + professional exports.
+# Heavy RAG/AI stack (langchain, chromadb, etc.) removed because AI features were disabled.
+# This makes build + cold start MUCH faster on Streamlit Community Cloud (free tier).
 
 # Core Web Framework
 streamlit>=1.32.0
 streamlit-extras>=0.4.0
 
-# RAG & LLM Stack (LangChain + ChromaDB)
-langchain>=0.2.0
-langchain-community>=0.2.0
-langchain-chroma>=0.1.0
-langchain-text-splitters>=0.2.0
-chromadb>=0.5.0
-sentence-transformers>=3.0.0
-
-# Protobuf compatibility fix for chromadb / sentence-transformers / langchain
-# Prevents "Descriptors cannot be created directly" error on Streamlit Cloud.
-# 3.20.3 is the most commonly successful pinned version for these stacks.
-protobuf==3.20.3
-
-# PDF Processing
-pdfplumber>=0.11.0
-pymupdf>=1.24.0
-
-# PDF Export (Beautiful professional reports)
+# PDF Export (Daily Service QC reports - rapih & modern)
 reportlab>=4.2.0
 
-# Excel Export
+# Excel Export (with photo support)
 openpyxl>=3.1.0
 pandas>=2.2.0
 xlsxwriter>=3.2.0
 
-# Visualization
+# Image handling (for embedding foto bukti in PDF/Excel)
+Pillow>=10.3.0
+
+# Visualization (Dashboard & metrics)
 plotly>=5.22.0
 
 # Utilities
 python-dotenv>=1.0.0
-Pillow>=10.3.0
 python-dateutil>=2.9.0
-pydantic>=2.7.0
 
-# LLM & Embeddings Providers
-langchain-openai>=0.1.0
-openai>=1.30.0
-
-# For better local embeddings (recommended)
-langchain-huggingface>=0.0.3
-
-# Optional: For local LLM via Ollama
-# langchain-ollama>=0.1.0
+# Note: 
+# - No langchain / chromadb / sentence-transformers / openai anymore → faster startup.
+# - Knowledge Base tab will show "not available" message (AI features were removed per request).
+# - Daily Service QC, exports, photo evidence, and data persistence (JSON) remain fully functional.
+# - First cold start on free tier can still take 15-40s after idle. Subsequent loads are fast.
