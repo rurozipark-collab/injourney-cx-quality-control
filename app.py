@@ -2788,6 +2788,8 @@ def render_daily_service_qc(context):
         # Current list first (so new data is visible immediately after submit on mobile)
         if daily["facility_checks"]:
             st.markdown("**Pengecekan Hari Ini**")
+            if st.button("🔄 Refresh Daftar", key="refresh_fac", use_container_width=True):
+                st.rerun()
             for idx, item in enumerate(daily["facility_checks"]):
                 emoji = "🟢" if item["status"] == "Baik" else ("🟡" if "Minor" in item["status"] else "🔴")
                 with st.expander(f"{emoji} {item['area']} — {item['status']}", expanded=False):
@@ -2801,34 +2803,34 @@ def render_daily_service_qc(context):
         else:
             st.info("Belum ada pengecekan fasilitas hari ini.")
 
-        with st.form("add_facility_check", clear_on_submit=True):
-            area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
-            status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
+        # Add / Update form (no st.form for more direct mobile feel + bigger tap targets)
+        area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
+        status = st.radio("Status", ["Baik", "Minor Issue", "Major Issue"], horizontal=True, key="fac_status")
 
-            # Visible feedback so user can see what they picked (mobile dropdown text can be hard to see)
-            st.caption(f"**Dipilih saat ini:** {area} — {status}")
+        # Visible feedback so user can see what they picked (mobile dropdown text can be hard to see)
+        st.caption(f"**Dipilih saat ini:** {area} — {status}")
 
-            notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
+        notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
 
-            # Foto bukti via galeri (camera direct removed to keep app lighter on mobile)
-            st.markdown("**Foto Bukti** (opsional)")
-            photo_file = st.file_uploader("Pilih foto dari galeri HP", type=["png", "jpg", "jpeg"], key="fac_photo_file", label_visibility="collapsed")
+        # Foto bukti via galeri (camera direct removed to keep app lighter on mobile)
+        st.markdown("**Foto Bukti** (opsional)")
+        photo_file = st.file_uploader("Pilih foto dari galeri HP", type=["png", "jpg", "jpeg"], key="fac_photo_file", label_visibility="collapsed")
 
-            if st.form_submit_button("➕ Tambah / Update Pengecekan Area Ini", type="primary"):
-                photo = photo_file
-                entry = {
-                    "timestamp": datetime.now().isoformat(),
-                    "area": area,
-                    "status": status,
-                    "notes": notes.strip(),
-                    "photo_name": getattr(photo, 'name', 'foto_bukti.jpg') if photo else None,
-                    "photo_data": base64.b64encode(photo.getvalue()).decode() if photo else None
-                }
-                daily["facility_checks"] = [e for e in daily["facility_checks"] if e["area"] != area]
-                daily["facility_checks"].append(entry)
-                save_daily_qc(daily)
-                st.success(f"✅ {area} dicatat sebagai {status}")
-                st.rerun()
+        if st.button("➕ Tambah / Update Pengecekan Area Ini", type="primary", use_container_width=True):
+            photo = photo_file
+            entry = {
+                "timestamp": datetime.now().isoformat(),
+                "area": area,
+                "status": status,
+                "notes": notes.strip(),
+                "photo_name": getattr(photo, 'name', 'foto_bukti.jpg') if photo else None,
+                "photo_data": base64.b64encode(photo.getvalue()).decode() if photo else None
+            }
+            daily["facility_checks"] = [e for e in daily["facility_checks"] if e["area"] != area]
+            daily["facility_checks"].append(entry)
+            save_daily_qc(daily)
+            st.success(f"✅ {area} dicatat sebagai {status}")
+            st.rerun()
 
     # ========== COMPLAINTS ==========
     with tab_comp:
@@ -2838,6 +2840,9 @@ def render_daily_service_qc(context):
         complaint_cats = ["Cleanliness", "Facility", "Staff Attitude", "Information", "Queue / Waiting Time", "Signage", "Other"]
 
         if daily["complaints"]:
+            st.markdown("**Keluhan Hari Ini**")
+            if st.button("🔄 Refresh Daftar", key="refresh_comp", use_container_width=True):
+                st.rerun()
             for i, c in enumerate(daily["complaints"]):
                 emoji = "🟢" if c["status"] == "Resolved" else ("🟡" if c["status"] == "In Progress" else "🔴")
                 with st.expander(f"{emoji} [{c['area']}] {c['category']} — {c['status']}", expanded=False):
@@ -2850,29 +2855,29 @@ def render_daily_service_qc(context):
         else:
             st.info("Belum ada keluhan tercatat hari ini.")
 
-        with st.form("add_complaint", clear_on_submit=True):
-            c_area = st.selectbox("Area Terkait", facility_areas, key="comp_area")
-            c_cat = st.selectbox("Kategori", complaint_cats, key="comp_cat")
-            c_desc = st.text_area("Deskripsi Keluhan", height=70, key="comp_desc")
-            c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
-            c_status = st.selectbox("Status Penanganan", ["Open", "In Progress", "Resolved"], key="comp_status")
+        # Add complaint (no st.form for more direct feel on mobile)
+        c_area = st.selectbox("Area Terkait", facility_areas, key="comp_area")
+        c_cat = st.selectbox("Kategori", complaint_cats, key="comp_cat")
+        c_desc = st.text_area("Deskripsi Keluhan", height=70, key="comp_desc")
+        c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
+        c_status = st.radio("Status Penanganan", ["Open", "In Progress", "Resolved"], horizontal=True, key="comp_status")
 
-            # Visible feedback for mobile
-            st.caption(f"**Dipilih:** {c_area} — {c_cat} — {c_status}")
+        # Visible feedback for mobile
+        st.caption(f"**Dipilih:** {c_area} — {c_cat} — {c_status}")
 
-            if st.form_submit_button("➕ Catat Keluhan", type="primary"):
-                comp = {
-                    "timestamp": datetime.now().isoformat(),
-                    "area": c_area,
-                    "category": c_cat,
-                    "description": c_desc.strip(),
-                    "action_today": c_action.strip(),
-                    "status": c_status
-                }
-                daily["complaints"].append(comp)
-                save_daily_qc(daily)
-                st.success("Keluhan dicatat.")
-                st.rerun()
+        if st.button("➕ Catat Keluhan", type="primary", use_container_width=True):
+            comp = {
+                "timestamp": datetime.now().isoformat(),
+                "area": c_area,
+                "category": c_cat,
+                "description": c_desc.strip(),
+                "action_today": c_action.strip(),
+                "status": c_status
+            }
+            daily["complaints"].append(comp)
+            save_daily_qc(daily)
+            st.success("Keluhan dicatat.")
+            st.rerun()
 
     # ========== ISSUES + RCA ==========
     with tab_iss:
@@ -2888,6 +2893,8 @@ def render_daily_service_qc(context):
         # List of issues first (so new data visible immediately after submit)
         if daily["issues"]:
             st.markdown("### Daftar Issue Hari Ini")
+            if st.button("🔄 Refresh Daftar", key="refresh_iss", use_container_width=True):
+                st.rerun()
 
             for idx, iss in enumerate(daily["issues"]):
                 status_emoji = "🟢" if iss["status"] == "Closed" else ("🟡" if iss["status"] == "In Progress" else "🔴")
@@ -2910,38 +2917,35 @@ def render_daily_service_qc(context):
         else:
             st.info("Belum ada issue. Tambahkan melalui form di atas.")
 
-        # Add new issue form
-        with st.form("add_issue", clear_on_submit=True):
-            i_area = st.selectbox("Area", facility_areas, key="issue_area")
-            i_desc = st.text_area("Deskripsi Masalah / Temuan", height=70, key="issue_desc")
-            i_cat = st.selectbox("Kategori Masalah", issue_cats, key="issue_cat")
-            i_rca = st.selectbox("Root Cause (sementara)", rca_options, key="issue_rca")
-            i_immediate = st.text_input("Tindakan Segera yang Sudah Dilakukan", key="issue_immediate")
-            i_pic = st.text_input("Penanggung Jawab (PIC)", key="issue_pic")
-            i_due = st.date_input("Target Penyelesaian", value=datetime.now().date(), key="issue_due")
-            i_status = st.selectbox("Status", ["Open", "In Progress", "Closed"], key="issue_status")
+        # Add new issue form (no st.form for direct mobile submit)
+        i_area = st.selectbox("Area", facility_areas, key="issue_area")
+        i_desc = st.text_area("Deskripsi Masalah / Temuan", height=70, key="issue_desc")
+        i_cat = st.selectbox("Kategori Masalah", issue_cats, key="issue_cat")
+        i_rca = st.radio("Root Cause (sementara)", rca_options, horizontal=False, key="issue_rca")  # vertical for many options
+        i_immediate = st.text_input("Tindakan Segera yang Sudah Dilakukan", key="issue_immediate")
+        i_pic = st.text_input("Penanggung Jawab (PIC)", key="issue_pic")
+        i_due = st.date_input("Target Penyelesaian", value=datetime.now().date(), key="issue_due")
+        i_status = st.radio("Status", ["Open", "In Progress", "Closed"], horizontal=True, key="issue_status")
 
-            # Visible feedback for mobile
-            st.caption(f"**Dipilih:** {i_area} — {i_cat} — {i_rca} — {i_status}")
+        # Visible feedback for mobile
+        st.caption(f"**Dipilih:** {i_area} — {i_cat} — {i_rca} — {i_status}")
 
-            submitted = st.form_submit_button("➕ Tambah Issue + RCA", type="primary")
-
-            if submitted:
-                new_issue = {
-                    "timestamp": datetime.now().isoformat(),
-                    "area": i_area,
-                    "description": i_desc.strip(),
-                    "category": i_cat,
-                    "root_cause": i_rca,
-                    "immediate_action": i_immediate.strip(),
-                    "pic": i_pic.strip(),
-                    "due_date": str(i_due),
-                    "status": i_status
-                }
-                daily["issues"].append(new_issue)
-                save_daily_qc(daily)
-                st.success("Issue berhasil dicatat.")
-                st.rerun()
+        if st.button("➕ Tambah Issue + RCA", type="primary", use_container_width=True):
+            new_issue = {
+                "timestamp": datetime.now().isoformat(),
+                "area": i_area,
+                "description": i_desc.strip(),
+                "category": i_cat,
+                "root_cause": i_rca,
+                "immediate_action": i_immediate.strip(),
+                "pic": i_pic.strip(),
+                "due_date": str(i_due),
+                "status": i_status
+            }
+            daily["issues"].append(new_issue)
+            save_daily_qc(daily)
+            st.success("Issue berhasil dicatat.")
+            st.rerun()
 
     # ========== SUMMARY & EXPORT ==========
     with tab_sum:
