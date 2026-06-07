@@ -2738,7 +2738,6 @@ def render_daily_service_qc(context):
             "Lift / Escalator", "Signage & Wayfinding", "Parking Area", "Other"
         ]
 
-        # Add form - original style with st.form and camera + file upload
         with st.form("add_facility_check", clear_on_submit=True):
             area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
             status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
@@ -2795,7 +2794,7 @@ def render_daily_service_qc(context):
             c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
             c_status = st.selectbox("Status Penanganan", ["Open", "In Progress", "Resolved"], key="comp_status")
 
-            if st.form_submit_button("➕ Catat Keluhan", type="primary", use_container_width=True):
+            if st.form_submit_button("➕ Catat Keluhan", type="primary"):
                 comp = {
                     "timestamp": datetime.now().isoformat(),
                     "area": c_area,
@@ -2832,10 +2831,6 @@ def render_daily_service_qc(context):
         rca_options = ["Belum diketahui", "Kurangnya cleaning", "Kerusakan fasilitas", "Proses tidak efisien", 
                        "Kurang koordinasi", "Kurang training staff", "Sistem / equipment error", "Lainnya"]
 
-        st.divider()
-
-        # List of issues first (so new data visible immediately after submit)
-        # Add new issue form (restored original st.form)
         with st.form("add_issue", clear_on_submit=True):
             i_area = st.selectbox("Area", facility_areas, key="issue_area")
             i_desc = st.text_area("Deskripsi Masalah / Temuan", height=70, key="issue_desc")
@@ -2846,7 +2841,7 @@ def render_daily_service_qc(context):
             i_due = st.date_input("Target Penyelesaian", value=datetime.now().date(), key="issue_due")
             i_status = st.selectbox("Status", ["Open", "In Progress", "Closed"], key="issue_status")
 
-            if st.form_submit_button("➕ Tambah Issue + RCA", type="primary", use_container_width=True):
+            if st.form_submit_button("➕ Tambah Issue + RCA", type="primary"):
                 new_issue = {
                     "timestamp": datetime.now().isoformat(),
                     "area": i_area,
@@ -2869,8 +2864,7 @@ def render_daily_service_qc(context):
                 status_emoji = "🟢" if iss["status"] == "Closed" else ("🟡" if iss["status"] == "In Progress" else "🔴")
                 header = f"{status_emoji} [{iss['area']}] {iss['category']} — {iss['status']}"
 
-                with st.container(border=True):
-                    st.markdown(f"**{header}**")
+                with st.expander(f"{header}", expanded=False):
                     st.write(f"**Deskripsi:** {iss['description']}")
                     st.write(f"**Root Cause (saat ini):** {iss['root_cause']}")
                     st.write(f"**Tindakan Segera:** {iss['immediate_action'] or '-'}")
@@ -2880,9 +2874,6 @@ def render_daily_service_qc(context):
                         daily["issues"].pop(idx)
                         save_daily_qc(daily)
                         st.rerun()
-
-                    st.markdown("")  # spacing
-
         else:
             st.info("Belum ada issue. Tambahkan melalui form di atas.")
 
@@ -2917,7 +2908,7 @@ Open Issues: {len([i for i in iss if i.get('status') != 'Closed'])}"""
         st.divider()
 
         # Professional exports (the ones we fixed earlier)
-        if st.button("📄 Generate & Download PDF Report (Modern & Ready for Audit)", type="primary", use_container_width=True):
+        if st.button("📄 Generate & Download PDF Report", type="primary", use_container_width=True):
             if not (fc or comps or iss):
                 st.warning("Belum ada data.")
             else:
@@ -2925,7 +2916,7 @@ Open Issues: {len([i for i in iss if i.get('status') != 'Closed'])}"""
                 fname = f"Daily_Service_QC_Report_{daily.get('date')}_{daily.get('inspector','').replace(' ', '_')}.pdf"
                 st.download_button("⬇️ Download PDF", data=pdf_bytes, file_name=fname, mime="application/pdf", use_container_width=True)
 
-        if st.button("📊 Download Excel Report (Multi-Sheet, Professional)", type="primary", use_container_width=True):
+        if st.button("📊 Download Excel Report", type="primary", use_container_width=True):
             if not (fc or comps or iss):
                 st.warning("Belum ada data.")
             else:
