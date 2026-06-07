@@ -2728,41 +2728,34 @@ def render_daily_service_qc(context):
     st.markdown("## 📋 Daily Service QC (Harian)")
     st.caption("Catat kegiatan harian secara cepat. Data tersimpan otomatis dan hanya akan hilang jika Anda hapus secara manual (tombol Hapus atau 'Mulai Hari Baru').")
 
-    # Mobile / PWA usage tip - iPhone focused. Prioritizes the permanent stable cloud URL.
+    # Prominent stable link for sharing & PWA
+    st.success("🔗 Link Permanen (bisa dibagikan & install di HP): https://injourney-cx-daily-qc.streamlit.app")
+
+    # Mobile / PWA usage tip - iPhone focused. Now using the real stable URL.
     with st.expander("📱 Install sebagai App di iPhone (Bisa dari Mana Saja)", expanded=True):
         st.markdown("""
-        **Cara TERBAIK & PERMANEN (rekomendasi untuk tim):**
+        **✅ Link Stabil Permanen (24/7, gratis, siap pakai):**
 
-        Setelah deploy ke **Streamlit Community Cloud**, kamu akan dapat link stabil 24/7 (contoh: `https://username-injourney-cx-daily-qc.streamlit.app`).
+        **https://injourney-cx-daily-qc.streamlit.app**
 
-        **Langkah di iPhone (Safari):**
-        1. Buka link stabil tersebut di **Safari**.
+        **Langkah Install di iPhone (Safari):**
+        1. Buka link di atas pakai **Safari** (bukan Chrome/Firefox).
         2. Ketuk tombol **Share** (kotak dengan panah ke atas).
         3. Scroll ke bawah → pilih **"Add to Home Screen"**.
-        4. Beri nama (misal "CX Daily QC") → Add.
+        4. Ganti nama jadi **"CX Daily QC"** → Add.
 
-        Selesai! Akan muncul icon di home screen seperti aplikasi asli. Buka dari situ = full screen, cepat, kamera & foto bukti langsung jalan, dan bisa dipakai siapa saja yang punya link (asalkan ada internet).
+        Selesai! Icon akan muncul di home screen seperti app asli. Buka dari situ = full screen, cepat, kamera langsung aktif, dan **siapa saja** yang punya link bisa pakai (asalkan ada internet).
 
-        **PENTING untuk data (Free Tier Cloud):**
-        Penyimpanan di Streamlit Community Cloud bersifat sementara. Data Daily Service QC (facility checks, complaints, issues + foto) **hanya aman kalau kamu Export JSON**.
-        - Setiap selesai input hari itu, pakai tombol **"Export Daily Data (JSON for backup)"** di bagian bawah halaman ini.
-        - Besok atau setelah restart app, pakai **"Import Daily Data JSON"** untuk kembalikan data.
-        - Data hanya hilang kalau kamu tekan "Mulai Hari Baru" atau tombol Hapus.
+        **PENTING — Data di Cloud (Free Tier):**
+        Penyimpanan bersifat sementara. Data Daily Service QC (facility, complaints, issues + foto) **hanya aman kalau di-Export**.
+        - Tiap selesai hari, scroll ke bawah → tekan **"Export Daily Data (JSON for backup)"**.
+        - Besok / setelah app restart → pakai **"Import Daily Data JSON"** untuk restore.
+        - Data **hanya hilang** kalau kamu tekan "Mulai Hari Baru" atau tombol Hapus.
 
-        **Alternatif sementara (kalau belum sempat deploy cloud atau testing lokal):**
-        Pakai `./run.sh --public` (ngrok) di laptop. Link-nya berubah setiap restart dan laptop harus nyala.
+        Link ini stabil selamanya. Tidak perlu laptop nyala. Bisa dibagikan ke tim.
         """)
 
-    # Show current public link if available (only for local ngrok --public mode)
-    public_url_file = Path(__file__).parent / ".current_public_url"
-    if public_url_file.exists():
-        try:
-            pub = public_url_file.read_text().strip()
-            if pub:
-                st.success(f"**Current public link (sementara via ngrok):** {pub}")
-                st.caption("Untuk versi permanen: deploy ke Streamlit Community Cloud (gratis).")
-        except Exception:
-            pass
+    # Ngrok logic removed — app runs on permanent stable URL above.
 
     today = str(datetime.now().date())
     live_inspector = context.get("inspector", "Inspector")
