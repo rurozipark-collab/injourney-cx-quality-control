@@ -2655,10 +2655,14 @@ def load_daily_qc(date_str: str, inspector: str) -> dict | None:
 
 
 def save_daily_qc(data: dict):
-    """Persist current daily qc data to disk."""
-    if not data or not data.get("date") or not data.get("inspector"):
+    """Persist current daily qc data to disk.
+    For Daily Service QC (harian) we always use a shared file per date ("harian")
+    so that inputs on mobile automatically appear on Mac (and vice versa) -- fully integrated.
+    """
+    if not data or not data.get("date"):
         return
-    path = _get_daily_qc_file_path(data["date"], data["inspector"])
+    # Force shared harian file for cross-device integration
+    path = _get_daily_qc_file_path(data["date"], "harian")
     try:
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
@@ -2667,9 +2671,11 @@ def save_daily_qc(data: dict):
         print(f"[Daily QC] Gagal simpan: {e}")
 
 
-def delete_daily_qc_file(date_str: str, inspector: str):
-    """Delete persisted file (used by 'Mulai Hari Baru')."""
-    path = _get_daily_qc_file_path(date_str, inspector)
+def delete_daily_qc_file(date_str: str, inspector: str = "harian"):
+    """Delete persisted file (used by 'Mulai Hari Baru').
+    Always targets the shared harian file.
+    """
+    path = _get_daily_qc_file_path(date_str, "harian")
     try:
         if path.exists():
             path.unlink()
@@ -2726,8 +2732,11 @@ def render_daily_service_qc(context):
 
     # === PERSISTENCE: Load from disk if available for today ===
     # Data hanya hilang kalau user explicitly delete
+    # === PERSISTENCE: Shared harian data per date (integrated across all devices - phone & Mac see the same) ===
+    # Using fixed "harian" key so input on mobile automatically appears on Mac (and vice versa)
+    # The "inspector" field is still updated from sidebar for labeling new entries.
     if "daily_qc" not in st.session_state or st.session_state.daily_qc.get("date") != today:
-        loaded = load_daily_qc(today, live_inspector)
+        loaded = load_daily_qc(today, "harian")  # always shared file
         if loaded:
             st.session_state.daily_qc = loaded
         else:
@@ -2742,12 +2751,11 @@ def render_daily_service_qc(context):
 
     daily = st.session_state.daily_qc
 
-    # Sync live inspector and location from sidebar on EVERY render
-    # This makes changes in sidebar immediately visible in Daily Service QC header
+    # Sync live inspector and location from sidebar on EVERY render (for labeling)
     if daily.get("inspector") != live_inspector or daily.get("location") != live_location:
         daily["inspector"] = live_inspector
         daily["location"] = live_location
-        save_daily_qc(daily)
+        save_daily_qc(daily)  # will save to the shared harian file
 
     current_inspector = daily.get("inspector", live_inspector)
     current_location = daily.get("location", live_location)
@@ -2763,17 +2771,18 @@ def render_daily_service_qc(context):
         st.info(current_location, icon="📍")
 
     # Prominent data context for cross-device (phone <-> Mac) visibility
+    # Now using shared "harian" file per date so mobile input automatically appears on Mac.
     st.markdown(
         f'<div style="background:#fef3c7; color:#92400e; padding:8px 12px; border-radius:8px; font-size:0.9rem; margin:8px 0; border:1px solid #fcd34d;">'
-        f'<b>Data saat ini:</b> Inspector = <b>{current_inspector}</b> | Tanggal = <b>{daily.get("date")}</b><br>'
-        f'File JSON: <code>{daily.get("date")}_{current_inspector.replace(" ", "_")}.json</code><br>'
-        f'<b>Penting:</b> Gunakan nama Inspector <b>persis sama</b> di HP dan Mac agar data yang diinput di mobile tampil di Mac (dan sebaliknya). '
-        f'Gunakan tombol <b>Export Daily Data (JSON)</b> di tab Ringkasan setelah input penting, lalu Import di perangkat lain.'
+        f'<b>Data harian bersama</b> (terintegrasi HP ↔ Mac)<br>'
+        f'Tanggal: <b>{daily.get("date")}</b> | Inspector saat ini: <b>{current_inspector}</b><br>'
+        f'File: <code>{daily.get("date")}_harian.json</code> (shared)<br>'
+        f'Input di mobile akan otomatis tampil di Mac (dan sebaliknya) selama tanggal sama.'
         f'</div>',
         unsafe_allow_html=True
     )
 
-    if st.button("🔄 Muat Ulang Data (dari disk)", key="reload_daily_top", use_container_width=True):
+    if st.button("🔄 Muat Ulang Data dari Server", key="reload_daily_top", use_container_width=True):
         st.session_state.pop("daily_qc", None)
         st.rerun()
 
@@ -2804,9 +2813,6 @@ def render_daily_service_qc(context):
         with st.form("add_facility_check", clear_on_submit=True):
             area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
             status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
-
-            # Very visible current selection for mobile (original selectbox look preserved)
-            st.markdown(f'<div style="background:#e0f2fe; color:#0369a1; padding:6px 12px; border-radius:8px; font-size:0.95rem; margin:6px 0; display:inline-block; border:1px solid #7dd3fc;"><b>Dipilih:</b> {area} — {status}</div>', unsafe_allow_html=True)
 
             notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
 
@@ -2862,9 +2868,6 @@ def render_daily_service_qc(context):
             c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
             c_status = st.selectbox("Status Penanganan", ["Open", "In Progress", "Resolved"], key="comp_status")
 
-            # Very visible current selection for mobile
-            st.markdown(f'<div style="background:#e0f2fe; color:#0369a1; padding:6px 12px; border-radius:8px; font-size:0.95rem; margin:6px 0; display:inline-block; border:1px solid #7dd3fc;"><b>Dipilih:</b> {c_area} — {c_cat} — {c_status}</div>', unsafe_allow_html=True)
-
             if st.form_submit_button("➕ Catat Keluhan", type="primary"):
                 comp = {
                     "timestamp": datetime.now().isoformat(),
@@ -2917,9 +2920,6 @@ def render_daily_service_qc(context):
             i_pic = st.text_input("Penanggung Jawab (PIC)", key="issue_pic")
             i_due = st.date_input("Target Penyelesaian", value=datetime.now().date(), key="issue_due")
             i_status = st.selectbox("Status", ["Open", "In Progress", "Closed"], key="issue_status")
-
-            # Very visible current selection for mobile
-            st.markdown(f'<div style="background:#e0f2fe; color:#0369a1; padding:6px 12px; border-radius:8px; font-size:0.95rem; margin:6px 0; display:inline-block; border:1px solid #7dd3fc;"><b>Dipilih:</b> {i_area} — {i_cat} — {i_rca} — {i_status}</div>', unsafe_allow_html=True)
 
             if st.form_submit_button("➕ Tambah Issue + RCA", type="primary"):
                 new_issue = {
@@ -3035,7 +3035,7 @@ Open Issues: {len([i for i in iss if i.get('status') != 'Closed'])}"""
 
         if st.button("🔄 Mulai Hari Baru (Clear Data)", type="secondary"):
             # Delete persisted file so data truly disappears only on explicit clear
-            delete_daily_qc_file(today, live_inspector)
+            delete_daily_qc_file(today, "harian")
             st.session_state.daily_qc = {
                 "date": str(datetime.now().date()),
                 "inspector": live_inspector,
