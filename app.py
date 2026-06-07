@@ -442,350 +442,288 @@ def apply_branding():
 
     css = f"""
     <style>
-    /* ==================== BASE (LIGHT MODE) ==================== */
+    /* ============================================
+       MODERN, COOL & SOPHISTICATED DESIGN
+       InJourney Airports CX - Premium Inspection Tool
+       Clean, professional, mobile-first, canggih
+    ============================================ */
+
+    /* BASE */
     .stApp {{
-        background-color: {light["bg"]} !important;
+        background-color: #F1F5F9 !important;  /* softer modern gray */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }}
 
+    /* Premium Header */
     .injourney-header {{
-        background: linear-gradient(90deg, {INJOURNEY["blue"]} 0%, {INJOURNEY["primary"]} 100%);
-        padding: 1rem 1.5rem;
-        border-radius: 14px;
-        margin-bottom: 0.8rem;
-        box-shadow: 0 6px 16px rgba(0, 168, 168, 0.18);
+        background: linear-gradient(135deg, {INJOURNEY["blue"]} 0%, {INJOURNEY["primary"]} 100%);
+        padding: 1.25rem 1.75rem;
+        border-radius: 18px;
+        margin-bottom: 1rem;
+        box-shadow: 0 10px 25px -5px rgba(0, 51, 102, 0.25), 0 4px 6px -4px rgba(0, 51, 102, 0.1);
         color: white;
+        position: relative;
+        overflow: hidden;
+    }}
+    .injourney-header::after {{
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 40%;
+        height: 200%;
+        background: linear-gradient(transparent, rgba(255,255,255,0.12), transparent);
+        transform: skewX(-25deg);
     }}
 
     .injourney-header h1 {{
-        font-size: 1.5rem;
+        font-size: 1.65rem;
         font-weight: 800;
         margin: 0;
-        letter-spacing: -0.5px;
+        letter-spacing: -0.6px;
+        position: relative;
     }}
 
+    /* Modern Cards - canggih with lift */
     .cx-card {{
-        background: {light["card"]};
-        border-radius: 12px;
-        padding: 1.1rem 1.25rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid {light["border"]};
-        margin-bottom: 0.8rem;
-        color: {light["text"]};
-    }}
-
-    .pillar-badge {{
-        display: inline-block;
-        padding: 0.2rem 0.6rem;
-        border-radius: 999px;
-        font-size: 0.7rem;
-        font-weight: 700;
-        margin-right: 0.35rem;
-    }}
-    .pillar-people {{ background:#DBEAFE; color:#1E40AF; }}
-    .pillar-premises {{ background:#D1FAE5; color:#065F46; }}
-    .pillar-process {{ background:#FEF3C7; color:#92400E; }}
-
-    /* Category Cards */
-    .category-card {{
-        padding: 8px 14px;
-        margin-bottom: 6px;
-        border-radius: 8px;
-        border-left: 5px solid;
-        background-color: #F8FAFC;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-weight: 600;
-    }}
-    .category-card-people {{ border-left-color: #1E40AF; }}
-    .category-card-process {{ border-left-color: #3730A3; }}
-    .category-card-premises {{ border-left-color: #065F46; }}
-
-    .category-title {{
-        font-size: 0.93rem;
-        font-weight: 700;
+        background: white;
+        border-radius: 16px;
+        padding: 1.25rem 1.4rem;
+        box-shadow: 0 4px 6px -1px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.04);
+        border: 1px solid #E2E8F0;
+        margin-bottom: 1rem;
         color: #1E293B;
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }}
+    .cx-card:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.08);
     }}
 
-    /* Score colors - with subtle background for better visibility */
+    /* Status Badges - modern & clear */
+    .status-badge {{
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }}
+    .status-baik {{ background: #D1FAE5; color: #065F46; }}
+    .status-minor {{ background: #FEF3C7; color: #92400E; }}
+    .status-major {{ background: #FEE2E2; color: #991B1B; }}
+
+    /* Modern Form Inputs - premium feel, excellent on mobile */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div,
+    .stFileUploader > div > div {{
+        background: white !important;
+        border: 1.5px solid #CBD5E1 !important;
+        border-radius: 12px !important;
+        font-size: 16px !important;
+        padding: 14px 16px !important;
+        box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+        transition: all 0.2s ease;
+    }}
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus,
+    .stSelectbox > div > div:focus-within {{
+        border-color: {INJOURNEY["primary"]} !important;
+        box-shadow: 0 0 0 4px rgba(0, 168, 168, 0.15) !important;
+        outline: none !important;
+    }}
+
+    /* Strong visibility for selectbox selected value on mobile/iOS */
+    .stSelectbox [data-baseweb="single-value"],
+    .stSelectbox [data-baseweb="select"] > div,
+    .stSelectbox [data-baseweb="select"] > div > div,
+    .stSelectbox * {{
+        color: #1E293B !important;
+        font-weight: 600 !important;
+    }}
+    .stSelectbox [data-baseweb="placeholder"] {{
+        color: #64748B !important;
+        font-weight: 400 !important;
+    }}
+    .stSelectbox [data-baseweb="select"] > div {{
+        background: white !important;
+        border: 1.5px solid #94A3B8 !important;
+        border-radius: 12px !important;
+    }}
+
+    /* Premium Buttons */
+    .stButton > button {{
+        background: linear-gradient(135deg, {INJOURNEY["primary"]} 0%, {INJOURNEY["deep"]} 100%);
+        color: white !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        border: none !important;
+        padding: 0.6rem 1.4rem !important;
+        font-size: 0.95rem !important;
+        box-shadow: 0 4px 6px -1px rgb(0 168 168 / 0.3);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }}
+    .stButton > button:hover {{
+        transform: translateY(-1px);
+        box-shadow: 0 10px 15px -3px rgb(0 168 168 / 0.4);
+    }}
+    .stButton > button[kind="secondary"] {{
+        background: white !important;
+        color: {INJOURNEY["text"]} !important;
+        border: 1.5px solid #E2E8F0 !important;
+        box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+    }}
+
+    /* Modern Tabs - clean & canggih */
+    .stTabs [data-baseweb="tab-list"] {{
+        background: #F1F5F9;
+        padding: 6px;
+        border-radius: 14px;
+        box-shadow: inset 0 1px 2px rgb(15 23 42 / 0.06);
+    }}
+    .stTabs [data-baseweb="tab"] {{
+        height: 42px;
+        border-radius: 10px;
+        font-weight: 600;
+        color: #475569;
+        transition: all 0.2s ease;
+    }}
+    .stTabs [aria-selected="true"] {{
+        background: white;
+        color: {INJOURNEY["blue"]} !important;
+        box-shadow: 0 2px 4px rgb(15 23 42 / 0.08);
+        font-weight: 700;
+    }}
+
+    /* Elegant List Cards (replacing plain expanders for modern feel) */
+    .modern-entry-card {{
+        background: white;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 1rem 1.15rem;
+        margin-bottom: 0.65rem;
+        box-shadow: 0 2px 4px rgb(15 23 42 / 0.04);
+        transition: all 0.2s ease;
+    }}
+    .modern-entry-card:hover {{
+        box-shadow: 0 8px 16px -4px rgb(15 23 42 / 0.1);
+        transform: translateY(-1px);
+    }}
+
+    /* Photo thumbnails - clean & premium */
+    .photo-thumb {{
+        border-radius: 10px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 2px 4px rgb(15 23 42 / 0.06);
+    }}
+
+    /* Score / Status indicators - sophisticated */
     .score-high {{
         color: #059669 !important;
-        font-weight: 700;
-        background: #D1FAE5;
-        padding: 2px 8px;
-        border-radius: 6px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #D1FAE5, #A7F3D0);
+        padding: 4px 14px;
+        border-radius: 999px;
+        font-size: 0.95rem;
     }}
     .score-medium {{
         color: #D97706 !important;
-        font-weight: 700;
-        background: #FEF3C7;
-        padding: 2px 8px;
-        border-radius: 6px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #FEF3C7, #FDE68A);
+        padding: 4px 14px;
+        border-radius: 999px;
+        font-size: 0.95rem;
     }}
     .score-low {{
         color: #DC2626 !important;
-        font-weight: 700;
-        background: #FEE2E2;
-        padding: 2px 8px;
-        border-radius: 6px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #FEE2E2, #FECACA);
+        padding: 4px 14px;
+        border-radius: 999px;
+        font-size: 0.95rem;
     }}
 
-    /* Guide Headers (colored gradients) */
-    .guide-header, .pillar-title-header {{
-        color: white !important;
-        padding: 12px 16px;
-        border-radius: 10px;
-        margin: 8px 0 6px 0;
-        font-size: 1.02rem;
-        font-weight: 700;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.18);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }}
-
-    .pillar-title-header:hover {{
-        transform: translateY(-1px);
-        box-shadow: 0 5px 14px rgba(0,0,0,0.25);
-    }}
-
-    /* Pillar Title Headers */
-    .pillar-title-header.people {{ background: linear-gradient(90deg, #1E40AF 0%, #3B82F6 100%); }}
-    .pillar-title-header.process {{ background: linear-gradient(90deg, #3730A3 0%, #6366F1 100%); }}
-    .pillar-title-header.premises {{ background: linear-gradient(90deg, #065F46 0%, #10B981 100%); }}
-
-    /* Expander arrow area */
-    .pillar-section [data-testid="stExpander"] details summary {{
-        padding: 0 6px !important;
-        min-height: 16px !important;
-        margin: -4px 0 4px 0 !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-    }}
-    .pillar-section [data-testid="stExpander"] details summary > span,
-    .pillar-section [data-testid="stExpander"] details summary p {{
-        display: none !important;
-    }}
-
-    .stTabs [data-baseweb="tab-list"] {{
-        background: white;
-        padding: 5px;
-        border-radius: 12px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }}
-    .stTabs [data-baseweb="tab"] {{
-        height: 44px;
-        border-radius: 8px;
-        font-weight: 600;
-    }}
-    .stTabs [aria-selected="true"] {{
-        background: linear-gradient(90deg, {INJOURNEY["primary"]}, {INJOURNEY["sky"]});
-        color: white !important;
-    }}
-
-    .stButton > button {{
-        background: linear-gradient(90deg, {INJOURNEY["primary"]}, {INJOURNEY["deep"]});
-        color: white;
-        border-radius: 8px;
-        font-weight: 600;
-        border: none;
-        padding: 0.4rem 1rem;
-    }}
-
+    /* Modern metric cards */
     .metric-card {{
         background: white;
-        border-left: 5px solid {INJOURNEY["primary"]};
-        padding: 0.85rem 1rem;
-        border-radius: 10px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
+        box-shadow: 0 2px 4px rgb(15 23 42 / 0.04);
     }}
 
-    /* ==================== DARK MODE OVERRIDES ==================== */
-    [data-theme="dark"] .stApp {{
-        background-color: {dark["bg"]} !important;
-    }}
-
-    [data-theme="dark"] .injourney-header {{
-        background: linear-gradient(90deg, #0F172A 0%, #134E4B 100%);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-    }}
-
-    [data-theme="dark"] .cx-card {{
-        background: {dark["card"]};
-        border: 1px solid {dark["border"]};
-        color: {dark["text"]};
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }}
-
-    [data-theme="dark"] .category-card {{
-        background-color: #1E293B;
-        border-color: #475569;
-        color: #E2E8F0;
-    }}
-
-    [data-theme="dark"] .category-title {{
-        color: #F1F5F9;
-    }}
-
-    [data-theme="dark"] .stTabs [data-baseweb="tab-list"] {{
-        background: #1E293B;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    }}
-
-    [data-theme="dark"] .stTabs [aria-selected="true"] {{
-        background: linear-gradient(90deg, {INJOURNEY["primary"]}, {INJOURNEY["sky"]});
-        color: white !important;
-    }}
-
-    [data-theme="dark"] .metric-card {{
-        background: {dark["card"]};
-        border-left-color: {INJOURNEY["primary"]};
-        color: {dark["text"]};
-    }}
-
-    [data-theme="dark"] .stMarkdown,
-    [data-theme="dark"] p,
-    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3,
-    [data-theme="dark"] label, [data-theme="dark"] span {{
-        color: {dark["text"]} !important;
-    }}
-
-    [data-theme="dark"] .stExpander,
-    [data-theme="dark"] .stDataFrame,
-    [data-theme="dark"] .stMetric {{
-        background-color: {dark["card"]} !important;
-    }}
-
-    /* (Old logo switching CSS removed) */
-
-    /* ========== IMPROVED DARK MODE COLORS ========== */
-    [data-theme="dark"] .injourney-header {{
-        background: linear-gradient(90deg, #1E293B 0%, #0F766E 100%);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-    }}
-
-    /* Better pillar badges in dark */
-    [data-theme="dark"] .pillar-people {{ background:#1E3A8A; color:#93C5FD; }}
-    [data-theme="dark"] .pillar-premises {{ background:#064E3B; color:#6EE7B7; }}
-    [data-theme="dark"] .pillar-process {{ background:#78350F; color:#FCD34D; }}
-
-    /* (Category card dark styles already defined above) */
-
-    /* Make guide/pillar headers slightly stronger in dark */
-    [data-theme="dark"] .guide-header,
-    [data-theme="dark"] .pillar-title-header {{
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
-    }}
-
-    /* Slightly tone down buttons in dark for better balance */
-    [data-theme="dark"] .stButton > button {{
-        box-shadow: 0 2px 8px rgba(0, 168, 168, 0.3);
-    }}
-
-    /* Improve tab contrast in dark */
-    [data-theme="dark"] .stTabs [data-baseweb="tab"] {{
-        color: #CBD5E1;
-    }}
-
-    /* =============================================
-       FORCE LIGHT MODE ONLY
-       (Dark & System modes disabled as per user request)
-    ============================================= */
-    
-    /* Hide the three dots menu (theme switcher) completely - Light mode only */
-    [data-testid="stHeaderActionButton"],
-    header [data-testid="stHeaderActionButton"],
-    .stApp header [data-testid="stHeaderActionButton"] {{
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }}
-    
-    /* Aggressively force light theme background and colors */
-    .stApp {{
-        background-color: #F8FAFC !important;
-    }}
-    
-    /* Ensure all text stays dark in light mode */
-    .stMarkdown, .stText, p, h1, h2, h3, h4, h5, h6, label, span, div {{
-        color: #1E293B !important;
-    }}
-
-    /* Protect the big colored pillar headers (People / Process / Premises) so text stays white */
-    .pillar-title-header,
-    .pillar-title-header * {{
-        color: #FFFFFF !important;
-    }}
-
-    /* Also protect the Panduan Detail headers inside the pillars */
-    .guide-header,
-    .guide-header * {{
-        color: #FFFFFF !important;
-    }}
-    
-    /* Force light cards and containers */
-    .stExpander, .stDataFrame, .stMetric, [data-testid="stMetric"], 
-    .stTextInput, .stTextArea, .stSelectbox, .stFileUploader {{
-        background-color: white !important;
-    }}
-
-    /* Ensure selectbox value text is always visible (dark text on light bg) - stronger for mobile */
-    .stSelectbox,
-    .stSelectbox * {{
-        color: #1e293b !important;
-    }}
-    .stSelectbox [data-baseweb="single-value"],
-    .stSelectbox [data-baseweb="select"] > div,
-    .stSelectbox [data-baseweb="select"] > div > div {{
-        color: #1e293b !important;
-        font-weight: 500 !important;
-    }}
-    .stSelectbox [data-baseweb="placeholder"] {{
-        color: #6b7280 !important;
-    }}
-    .stSelectbox [data-baseweb="select"] > div,
-    .stSelectbox [data-baseweb="select"] > div > div {{
-        background-color: #ffffff !important;
-        border: 1px solid #94a3b8 !important;
-    }}
-    
-    /* Force all text inside the main header to be pure white */
-    .injourney-header,
-    .injourney-header *,
-    .injourney-header div,
-    .injourney-header span {{
-        color: #FFFFFF !important;
-    }}
-
-    /* Sidebar fallback text */
+    /* Sidebar polish */
     .sidebar-fallback-title {{
         color: #003366;
         margin: 0;
-        font-size: 1.35rem;
+        font-size: 1.4rem;
         font-weight: 800;
     }}
     .sidebar-fallback-subtitle {{
         color: #00A8A8;
         margin: 0;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         font-weight: 700;
-        letter-spacing: 1.5px;
+        letter-spacing: 1.8px;
     }}
 
-    /* App Footer */
+    /* App Footer - subtle */
     .app-footer {{
         text-align: center;
         color: #64748B;
-        font-size: 0.75rem;
-        margin-top: 2rem;
-        padding-top: 1rem;
+        font-size: 0.72rem;
+        margin-top: 2.5rem;
+        padding-top: 1.25rem;
         border-top: 1px solid #E2E8F0;
+        opacity: 0.85;
     }}
 
-    /* (Header date is now styled inline for simplicity) */
+    /* Mobile PWA enhancements - touch friendly & modern */
+    @media (max-width: 768px) {{
+        .stApp {{
+            padding: 0.35rem !important;
+        }}
+        .stButton > button {{
+            min-height: 50px !important;
+            font-size: 1rem !important;
+            padding: 0.65rem 1.3rem !important;
+        }}
+        .stTextInput > div > div > input,
+        .stTextArea > div > div > textarea,
+        .stSelectbox > div > div {{
+            font-size: 16px !important;
+            padding: 13px 15px !important;
+            border-radius: 14px !important;
+        }}
+        .cx-card {{
+            padding: 1rem 1.15rem !important;
+            border-radius: 14px !important;
+        }}
+    }}
+
+    /* Force clean light mode */
+    .stApp {{
+        background-color: #F1F5F9 !important;
+    }}
+    .stMarkdown, .stText, p, h1, h2, h3, h4, h5, h6, label, span, div {{
+        color: #1E293B !important;
+    }}
+    .stExpander, .stDataFrame, .stMetric, [data-testid="stMetric"], 
+    .stTextInput, .stTextArea, .stSelectbox, .stFileUploader {{
+        background-color: white !important;
+    }}
+    .injourney-header, .injourney-header * {{
+        color: #FFFFFF !important;
+    }}
+    .pillar-title-header, .pillar-title-header * {{
+        color: #FFFFFF !important;
+    }}
+    .guide-header, .guide-header * {{
+        color: #FFFFFF !important;
+    }}
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
@@ -2802,16 +2740,19 @@ def render_daily_service_qc(context):
 
         # Add form - original style with st.form and camera + file upload
         with st.form("add_facility_check", clear_on_submit=True):
-            area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
-            status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
+            col1, col2 = st.columns([1.65, 1])
+            with col1:
+                area = st.selectbox("Area / Lokasi", facility_areas, key="fac_area")
+            with col2:
+                status = st.selectbox("Status", ["Baik", "Minor Issue", "Major Issue"], key="fac_status")
 
-            notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=80, key="fac_notes")
+            notes = st.text_area("Catatan / Temuan", placeholder="Contoh: Lantai basah di dekat pintu masuk toilet wanita", height=76, key="fac_notes")
 
             # Foto Bukti via galeri (direct camera removed to keep app lighter on mobile)
             st.markdown("**Foto Bukti** (sangat disarankan)")
             photo_file = st.file_uploader("Pilih dari galeri", type=["png", "jpg", "jpeg"], key="fac_photo_file", label_visibility="collapsed")
 
-            if st.form_submit_button("➕ Tambah / Update Pengecekan Area Ini", type="primary"):
+            if st.form_submit_button("➕ Tambah / Update Pengecekan Area Ini", type="primary", use_container_width=True):
                 photo = photo_file
                 entry = {
                     "timestamp": datetime.now().isoformat(),
@@ -2827,7 +2768,7 @@ def render_daily_service_qc(context):
                 st.success(f"✅ {area} dicatat sebagai {status}")
                 st.rerun()
 
-        # Current list (original position after the form)
+        # Current list (original simple expander style)
         if daily["facility_checks"]:
             st.markdown("**Pengecekan Hari Ini**")
             for idx, item in enumerate(daily["facility_checks"]):
@@ -2857,28 +2798,7 @@ def render_daily_service_qc(context):
             c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
             c_status = st.selectbox("Status Penanganan", ["Open", "In Progress", "Resolved"], key="comp_status")
 
-            if st.form_submit_button("➕ Catat Keluhan", type="primary"):
-                comp = {
-                    "timestamp": datetime.now().isoformat(),
-                    "area": c_area,
-                    "category": c_cat,
-                    "description": c_desc.strip(),
-                    "action_today": c_action.strip(),
-                    "status": c_status
-                }
-                daily["complaints"].append(comp)
-                save_daily_qc(daily)
-                st.success("Keluhan dicatat.")
-                st.rerun()
-
-        with st.form("add_complaint", clear_on_submit=True):
-            c_area = st.selectbox("Area Terkait", facility_areas, key="comp_area")
-            c_cat = st.selectbox("Kategori", complaint_cats, key="comp_cat")
-            c_desc = st.text_area("Deskripsi Keluhan", height=70, key="comp_desc")
-            c_action = st.text_input("Tindakan yang Sudah Dilakukan Hari Ini", key="comp_action")
-            c_status = st.selectbox("Status Penanganan", ["Open", "In Progress", "Resolved"], key="comp_status")
-
-            if st.form_submit_button("➕ Catat Keluhan", type="primary"):
+            if st.form_submit_button("➕ Catat Keluhan", type="primary", use_container_width=True):
                 comp = {
                     "timestamp": datetime.now().isoformat(),
                     "area": c_area,
@@ -2895,14 +2815,24 @@ def render_daily_service_qc(context):
         if daily["complaints"]:
             st.markdown("**Keluhan Hari Ini**")
             for i, c in enumerate(daily["complaints"]):
-                emoji = "🟢" if c["status"] == "Resolved" else ("🟡" if c["status"] == "In Progress" else "🔴")
-                with st.expander(f"{emoji} [{c['area']}] {c['category']} — {c['status']}", expanded=False):
-                    st.write(f"**Deskripsi:** {c['description']}")
-                    st.write(f"**Tindakan hari ini:** {c['action_today'] or '-'}")
-                    if st.button("Hapus", key=f"del_comp_{i}"):
+                status_class = "status-baik" if c["status"] == "Resolved" else ("status-minor" if c["status"] == "In Progress" else "status-major")
+                with st.container():
+                    st.markdown(f"""
+                    <div class="cx-card" style="padding:0.85rem 1.1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:#0F172A;">[{c['area']}] {c['category']}</div>
+                                <div style="margin:4px 0 2px; font-size:0.9rem; color:#475569;">{c['description']}</div>
+                                <div style="font-size:0.82rem; color:#64748B;">Tindakan: {c['action_today'] or '—'}</div>
+                            </div>
+                            <div style="text-align:right; flex-shrink:0;">
+                                <span class="status-badge {status_class}">{c['status']}</span>
+                    """, unsafe_allow_html=True)
+                    if st.button("Hapus", key=f"del_comp_{i}", type="secondary"):
                         daily["complaints"].pop(i)
                         save_daily_qc(daily)
                         st.rerun()
+                    st.markdown("</div></div></div>", unsafe_allow_html=True)
         else:
             st.info("Belum ada keluhan tercatat hari ini.")
 
@@ -2929,7 +2859,7 @@ def render_daily_service_qc(context):
             i_due = st.date_input("Target Penyelesaian", value=datetime.now().date(), key="issue_due")
             i_status = st.selectbox("Status", ["Open", "In Progress", "Closed"], key="issue_status")
 
-            if st.form_submit_button("➕ Tambah Issue + RCA", type="primary"):
+            if st.form_submit_button("➕ Tambah Issue + RCA", type="primary", use_container_width=True):
                 new_issue = {
                     "timestamp": datetime.now().isoformat(),
                     "area": i_area,
@@ -2947,25 +2877,31 @@ def render_daily_service_qc(context):
                 st.rerun()
 
         if daily["issues"]:
-            st.markdown("### Daftar Issue Hari Ini")
+            st.markdown("**Daftar Issue Hari Ini**")
             for idx, iss in enumerate(daily["issues"]):
-                status_emoji = "🟢" if iss["status"] == "Closed" else ("🟡" if iss["status"] == "In Progress" else "🔴")
-                header = f"{status_emoji} [{iss['area']}] {iss['category']} — {iss['status']}"
-
-                with st.container(border=True):
-                    st.markdown(f"**{header}**")
-                    st.write(f"**Deskripsi:** {iss['description']}")
-                    st.write(f"**Root Cause (saat ini):** {iss['root_cause']}")
-                    st.write(f"**Tindakan Segera:** {iss['immediate_action'] or '-'}")
-                    st.write(f"**PIC:** {iss['pic'] or '-'}  |  **Due:** {iss['due_date']}")
-
-                    if st.button("Hapus Issue", key=f"del_iss_{idx}", type="secondary"):
+                status_class = "status-baik" if iss["status"] == "Closed" else ("status-minor" if iss["status"] == "In Progress" else "status-major")
+                with st.container():
+                    st.markdown(f"""
+                    <div class="cx-card" style="padding:0.85rem 1.1rem;">
+                        <div style="display:flex; justify-content:space-between; gap:10px;">
+                            <div style="flex:1; min-width:0;">
+                                <div style="font-weight:700; color:#0F172A; font-size:0.98rem;">[{iss['area']}] {iss['category']}</div>
+                                <div style="margin:4px 0; font-size:0.88rem; color:#475569; line-height:1.3;">{iss['description']}</div>
+                                <div style="font-size:0.8rem; color:#64748B;">
+                                    RCA: {iss['root_cause']} • PIC: {iss['pic'] or '—'} • Due: {iss['due_date']}
+                                </div>
+                                <div style="margin-top:3px; font-size:0.8rem; color:#475569;">
+                                    Tindakan: {iss['immediate_action'] or '—'}
+                                </div>
+                            </div>
+                            <div style="flex-shrink:0; text-align:right;">
+                                <span class="status-badge {status_class}">{iss['status']}</span>
+                    """, unsafe_allow_html=True)
+                    if st.button("Hapus", key=f"del_iss_{idx}", type="secondary"):
                         daily["issues"].pop(idx)
                         save_daily_qc(daily)
                         st.rerun()
-
-                    st.markdown("")  # spacing
-
+                    st.markdown("</div></div></div>", unsafe_allow_html=True)
         else:
             st.info("Belum ada issue. Tambahkan melalui form di atas.")
 
